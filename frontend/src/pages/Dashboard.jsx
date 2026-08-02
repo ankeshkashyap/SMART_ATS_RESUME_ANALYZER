@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../services/api"
-
+import DashboardLayout from "../components/common/DashboardLayout";
 
 function Dashboard() {
 
@@ -33,18 +33,7 @@ useEffect(()=>{
 
 
     return (
-        <div className="min-h-screen bg-background">
-
-            <h1 className="text-3xl font-bold p-8">
-                Dashboard
-                Welcome back ,  {user?.name}
-
-            </h1>
-        <p>
-            {user?.email}
-        </p>
-        </div>
-        
+            <DashboardLayout user={user}/>
     );
 }
 
