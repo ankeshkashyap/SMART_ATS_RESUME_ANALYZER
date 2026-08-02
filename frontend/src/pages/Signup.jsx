@@ -35,23 +35,17 @@ function Signup() {
                 setError("Password must be at least 8 characters.");
                 return;
             }
-            console.log("Validation passed");
+            
 
             setLoading(true);
-            console.log("Loading started");
-
             setError("");
             setSuccess("");
             try{
-            console.log("Sending request...");
-
             const response = await api.post("/auth/signup",{
                 name,
                 email,
                 password,
             });
-            console.log("Backend response:", response.data);
-
             setSuccess(response.data.message)
             setTimeout(() => {
             navigate("/login");
@@ -66,7 +60,6 @@ function Signup() {
         }
         }       
         finally {
-            console.log("Loading finished");
 
             setLoading(false)
         }
