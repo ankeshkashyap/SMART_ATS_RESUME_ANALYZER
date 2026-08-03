@@ -22,7 +22,7 @@ export default function Sidebar (){
         },
     ];
     return (
-        <aside className="w-64 bg-white border-r border-gray-200  min-h-screen">
+        <aside className="hidden md:block w-64 bg-white border-r border-gray-200  min-h-screen">
             <nav className="p-6">
             <ul className="space-y-2">
                {menuItems.map((item)=> {

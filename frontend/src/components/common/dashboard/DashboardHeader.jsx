@@ -1,6 +1,6 @@
 export default function DashboadHeader({user}){
     return(
-        <section className="flex justify-between items-center">
+        <section className="flex flex-col sm:flex-row  sm:justify-between sm:items-center gap-4">
             <div>
             <h1 className="text-3xl font-bold text-gray-900">
                 Dashboard

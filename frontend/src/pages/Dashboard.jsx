@@ -4,6 +4,8 @@ import DashboardLayout from "../components/common/DashboardLayout";
 import DashboadHeader from "../components/common/dashboard/DashboardHeader";
 import StatCard from "../components/ui/StatCard";
 import { FileText, BarChart3,Briefcase, Star } from "lucide-react";
+import RecentAnalyses from "../components/common/dashboard/RecentAnalyses";
+
 function Dashboard() {
 
 const [user,setUser]=useState(null);
@@ -57,6 +59,9 @@ useEffect(()=>{
                     title="Jobs Matched"
                     value="12"
                     icon={Briefcase}/>
+            </div>
+            <div className="mt-8">
+                <RecentAnalyses />
             </div>
             </DashboardLayout>
             
