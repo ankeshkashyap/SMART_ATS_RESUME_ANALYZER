@@ -5,12 +5,14 @@ import DashboadHeader from "../components/common/dashboard/DashboardHeader";
 import StatCard from "../components/ui/StatCard";
 import { FileText, BarChart3,Briefcase, Star } from "lucide-react";
 import RecentAnalyses from "../components/common/dashboard/RecentAnalyses";
+import UploadResume from "./UploadResume";
 
 function Dashboard() {
 
 const [user,setUser]=useState(null);
 const[loading, setLoading]= useState(true);
 const [error,setError] = useState("");
+const [uploadOpen, setUploadOpen]= useState(false);
 
 useEffect(()=>{
     async function fetchProfile (){
@@ -38,7 +40,8 @@ useEffect(()=>{
 
     return (<div>
             <DashboardLayout user={user}>
-                <DashboadHeader user={user}/>
+                <DashboadHeader user={user}
+                onUploadClick={() => setUploadOpen(true)}/>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
                 <StatCard
                     title="Resumes Analyzed"
@@ -63,6 +66,13 @@ useEffect(()=>{
             <div className="mt-8">
                 <RecentAnalyses />
             </div>
+
+            {uploadOpen&& (
+                <UploadResume 
+                onClose={()=>setUploadOpen(false)}
+                />
+            )}
+
             </DashboardLayout>
             
             </div>

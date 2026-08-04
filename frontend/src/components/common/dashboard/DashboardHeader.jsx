@@ -1,4 +1,5 @@
-export default function DashboadHeader({user}){
+
+export default function DashboadHeader({user , onUploadClick}){
     return(
         <section className="flex flex-col sm:flex-row  sm:justify-between sm:items-center gap-4">
             <div>
@@ -9,7 +10,9 @@ export default function DashboadHeader({user}){
                 Welcome back, {user?.name}
             </p>
             </div>
-            <button className="bg-primary hover:bg-primary-hover text-white px-6 py-3 rounded-lg transition font-semibold">
+            <button 
+            onClick={onUploadClick}
+            className="bg-primary hover:bg-primary-hover text-white px-6 py-3 rounded-lg transition font-semibold">
                 Upload New Resume 
             </button>
         </section>

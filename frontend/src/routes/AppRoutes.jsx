@@ -4,6 +4,7 @@ import Signup from "../pages/Signup";
 import Login from "../pages/Login"
 import Dashboard from "../pages/Dashboard";
 import ProtectedRoute from "../components/ProtectedRoute";
+import UploadResume from "../pages/UploadResume";
 
 function AppRoutes() {
     return (
@@ -12,7 +13,7 @@ function AppRoutes() {
 
                 <Route
                     path="/"
-                    element={<Signup />}
+                    element={<Login />}
                 />
 
                 <Route
@@ -30,6 +31,10 @@ function AppRoutes() {
                 <ProtectedRoute>
                     <Dashboard />/
                 </ProtectedRoute>}
+                />
+                <Route 
+                path="/upload"
+                element={<UploadResume />} 
                 />
 
             </Routes>
