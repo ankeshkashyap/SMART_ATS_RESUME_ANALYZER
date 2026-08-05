@@ -1,12 +1,9 @@
 import { useState } from "react";
 import {Upload, X} from "lucide-react";
-import api from "../services/api";
 
 export default function UploadResume({onClose}){
     const [file,setFile]= useState(null);
-    const [error, setError]=useState("");
-    const [uploading, setUploading] = useState(false);
-    const [success, setSuccess] = useState(false);
+    const [error, setError]=useState("")
 
     const handleFile = (e) => {
         const selectedFile = e.target.files[0];
@@ -24,7 +21,6 @@ export default function UploadResume({onClose}){
         }
 
         setError("")
-        setSuccess(false);
         setFile(selectedFile);
     };
     const handleDragOver = (e)=>{
@@ -47,8 +43,7 @@ export default function UploadResume({onClose}){
             return;
         }
 
-        setError("");
-        setSuccess(false);
+        setError("")
         setFile(droppedFile);
     };
 
@@ -69,38 +64,6 @@ export default function UploadResume({onClose}){
 
         return null;
     }
-
-    const handleUpload = async () => {
-        if (!file){
-            return;
-        }
-        setError("")
-        setSuccess(false);
-        setUploading(true);
-        const formData = new FormData()
-        formData.append("file",file);
-
-        try{
-        const response = await api.post(
-            "/resume/upload",
-            formData,{
-                headers: {
-                    "Content-Type":"multipart/form-data"
-                }
-            }
-        );
-        setSuccess(true);
-    }
-    catch (error) {
-
-    setError(
-        error.response?.data?.detail ||
-        "Upload failed. Please try again.");
-    }
-    finally {
-        setUploading(false);
-    }
-    };
     return(
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
             onClick={onClose}>
@@ -165,27 +128,10 @@ export default function UploadResume({onClose}){
             )}
 
             {file && (
-                <>
                 <p>
                     Selected File : {file.name}
                 </p>
-                <button 
-                    onClick={handleUpload}
-                    disabled={uploading}
-                    className="mt-4 bg-primary text-white px-5 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed">
-                        {uploading? "Uploading...": "Upload"}
-                    </button>
-                    </>
             )}
-
-            {success && (
-                <div className="mt-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3">
-                    <p className="text-sm font-medium text-green-700">
-                        Resume uploaded successfully.
-                    </p>
-                </div>
-            )}
-
         </div>
         </div>
 
