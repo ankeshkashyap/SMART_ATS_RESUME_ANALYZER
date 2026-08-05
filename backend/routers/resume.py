@@ -9,6 +9,8 @@ from routers.auth import get_current_user
 from models.users import User
 from models.resume import Resume
 
+from parsers.resume_parser import parse_resume
+
 router = APIRouter(
     prefix="/resume",
     tags=["Resume"]
@@ -48,12 +50,24 @@ async def upload_resume(file: UploadFile= File(...),
     with open(file_path,"wb") as buffer :
         buffer.write(contents)
 
+    file_type = extension.replace(".","")
+    parsed_resume = parse_resume(str(file_path),file_type)
+
     resume = Resume (
         user_id = current_user.id,
         original_filename=file.filename,
         stored_filename=unique_filename,
         file_type=extension,
-        file_size=len(contents)
+        file_size=len(contents),
+
+        resume_text=parsed_resume["text"],
+        summary=parsed_resume["sections"]["summary"],
+        skills=parsed_resume["sections"]["skills"],
+        projects=parsed_resume["sections"]["projects"],
+        experience=parsed_resume["sections"]["experience"],
+        education=parsed_resume["sections"]["education"],
+        achievements=parsed_resume["sections"]["achievements"]
+
     )
     db.add(resume)
     db.commit()
@@ -65,5 +79,17 @@ async def upload_resume(file: UploadFile= File(...),
         "stored_filename": resume.stored_filename,
         "content_type":file.content_type,
         "size":resume.file_size,
-        "user_id":resume.user_id
+        "user_id":resume.user_id,
+
+        "parsed_resume":{
+            "text":resume.resume_text,
+            "sections": {
+                "summary": resume.summary,
+                "skills": resume.skills,
+                "projects": resume.projects,
+                "experience": resume.experience,
+                "education": resume.education,
+                "achievements": resume.achievements
+            }
+        }
     }

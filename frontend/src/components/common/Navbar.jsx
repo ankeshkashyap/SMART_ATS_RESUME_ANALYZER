@@ -1,5 +1,13 @@
-export default function Navbar ({user}){
+import { useNavigate } from "react-router-dom";
 
+export default function Navbar ({user}){
+const navigate = useNavigate();
+
+const handleLogout =() =>{
+    localStorage.removeItem("token");
+
+    navigate ("/login");
+}
 return(
      <header className="bg-navbar shadoe-md">
         <nav className="flex justify-between items-center px-8 py-4 max-w-screen-2xl mx-auto">
@@ -19,7 +27,8 @@ return(
             <p className="text-white font-medium">
                 {user?.name}
             </p>
-            <button className="bg-primary hover:bg-primary-hover text-white px-3 py-1 rounded-lg transition">
+            <button className="bg-primary hover:bg-primary-hover text-white px-3 py-1 rounded-lg transition"
+                onClick={handleLogout}>
                     Logout
             </button>
         </div>

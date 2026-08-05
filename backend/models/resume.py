@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer,String, TIMESTAMP, ForeignKey, text
+from sqlalchemy import Column, Integer,String,Text , TIMESTAMP, ForeignKey, text
 from database.base import Base
 
 class Resume(Base):
@@ -32,6 +32,33 @@ class Resume(Base):
     file_size= Column(
         Integer,
         nullable=False
+    )
+    resume_text= Column(Text,
+                        nullable=True)
+
+    summary= Column(Text,
+                    nullable=True)
+
+    skills=Column(
+        Text,
+        nullable=True
+    )
+
+    projects = Column(
+        Text,
+        nullable=True
+    )
+    experience= Column (
+        Text,
+        nullable=True
+    )
+    education = Column(
+        Text,
+        nullable=True
+    )
+    achievements = Column (
+        Text,
+        nullable=True
     )
     uploaded_at=Column(
         TIMESTAMP,
