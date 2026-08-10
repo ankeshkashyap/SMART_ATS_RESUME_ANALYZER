@@ -1,6 +1,6 @@
 from fastapi import FastAPI 
 from fastapi.middleware.cors import CORSMiddleware
-from routers import  auth,resume
+from routers import  auth,resume,jd
 from fastapi.exceptions import RequestValidationError
 from exception.validation import validation_exception_handler
 
@@ -30,6 +30,7 @@ app.add_middleware(
 )
 app.include_router(auth.router)
 app.include_router(resume.router)
+app.include_router(jd.router)
 
 @app.get("/")
 def home():

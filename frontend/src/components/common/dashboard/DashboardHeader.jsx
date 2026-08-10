@@ -1,5 +1,9 @@
+import { useNavigate } from "react-router-dom";
 
 export default function DashboadHeader({user , onUploadClick}){
+    
+const navigate = useNavigate();
+
     return(
         <section className="flex flex-col sm:flex-row  sm:justify-between sm:items-center gap-4">
             <div>
@@ -15,6 +19,13 @@ export default function DashboadHeader({user , onUploadClick}){
             className="bg-primary hover:bg-primary-hover text-white px-6 py-3 rounded-lg transition font-semibold">
                 Upload New Resume 
             </button>
+
+            <button
+            type="button"
+            onClick={() => navigate("/job-description")}
+            className="bg-primary hover:bg-primary-hover transition text-white font-semibold px-5 py-3 rounded-lg" >
+            Add Job Description
+        </button>
         </section>
     );
 }
