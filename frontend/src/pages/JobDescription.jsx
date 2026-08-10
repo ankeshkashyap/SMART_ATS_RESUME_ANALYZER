@@ -361,7 +361,7 @@ function JobDescription() {
     </div>
 
     {deleteID&& (
-        <div className="fixed inset-0 z-50 flex items-center justify-centre bg-black/40 px-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
             <div className="w-full max-w-md rounded-lg border border-border bg-white p-6 shadow-lg">
 
                 <h2 className="text-lg font-bold text-text-h">

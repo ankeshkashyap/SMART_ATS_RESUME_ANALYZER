@@ -11,3 +11,5 @@ dist/
 .vscode/
 backend/uploads/
 .DS_Store
+
+backend/test.py
