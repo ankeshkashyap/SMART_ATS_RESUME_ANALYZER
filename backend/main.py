@@ -1,6 +1,6 @@
 from fastapi import FastAPI 
 from fastapi.middleware.cors import CORSMiddleware
-from routers import  auth,resume,jd,nlp
+from routers import  auth,resume,jd,nlp,ats
 from fastapi.exceptions import RequestValidationError
 from exception.validation import validation_exception_handler
 
@@ -32,6 +32,7 @@ app.include_router(auth.router)
 app.include_router(resume.router)
 app.include_router(jd.router)
 app.include_router(nlp.router)
+app.include_router(ats.router)
 
 @app.get("/")
 def home():
