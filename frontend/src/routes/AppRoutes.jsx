@@ -6,6 +6,7 @@ import Dashboard from "../pages/Dashboard";
 import ProtectedRoute from "../components/ProtectedRoute";
 import UploadResume from "../pages/UploadResume";
 import JobDescription from "../pages/JobDescription";
+import Analysis from "../pages/Analysis";
 
 function AppRoutes() {
     return (
@@ -40,7 +41,14 @@ function AppRoutes() {
 
                 <Route path = "/job-description"
                 element = {<JobDescription />} />
-            </Routes>
+                
+                 <Route
+                path="/analysis"
+                element={<Analysis/>}/>
+                
+                
+                </Routes>
+                
         </BrowserRouter>
     );
 }

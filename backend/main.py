@@ -1,6 +1,6 @@
 from fastapi import FastAPI 
 from fastapi.middleware.cors import CORSMiddleware
-from routers import  auth,resume,jd,nlp,ats
+from routers import  auth,resume,jd,nlp,ats,analysis 
 from fastapi.exceptions import RequestValidationError
 from exception.validation import validation_exception_handler
 
@@ -9,6 +9,8 @@ from database.base import Base
 
 from models import users
 from models import resume as resume_model
+from models import job_description as job_description_model
+from models import analysis as analysis_model
 
 Base.metadata.create_all(bind=engine)
 app= FastAPI(
@@ -33,6 +35,7 @@ app.include_router(resume.router)
 app.include_router(jd.router)
 app.include_router(nlp.router)
 app.include_router(ats.router)
+app.include_router(analysis.router)
 
 @app.get("/")
 def home():

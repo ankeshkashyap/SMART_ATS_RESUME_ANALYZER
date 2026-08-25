@@ -59,18 +59,3 @@ def extract_keywords(text: str) -> list [str]:
 
     return keywords
 
-
-
-text = """
-We are looking for a Python developer.
-Experience with FastAPI, PostgreSQL and Docker is required.
-Knowledge of AWS and Git is preferred.
-"""
-
-normalized = normalize_jd(text)
-
-print("Normalized:")
-print(normalized)
-
-print("\nKeywords:")
-print(extract_keywords(normalized))
