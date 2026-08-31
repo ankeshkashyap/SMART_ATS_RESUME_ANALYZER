@@ -1,5 +1,7 @@
 from sqlalchemy import Column , Integer , TIMESTAMP , ForeignKey , text ,  JSON
 from database.base import Base
+from sqlalchemy.orm import relationship
+
 
 class Analysis (Base):
     __tablename__ =  "analyses"
@@ -76,3 +78,7 @@ class Analysis (Base):
         JSON ,
         nullable=True
     )
+
+    resume = relationship("Resume")
+    
+    job_description = relationship("JobDescription")

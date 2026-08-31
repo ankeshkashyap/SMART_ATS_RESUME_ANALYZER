@@ -5,12 +5,24 @@ class AnalysisCreate(BaseModel):
     resume_id:int
     job_description_id:int
 
+class ResumeInfo(BaseModel):
+    id: int
+    filename: str
+
+class JobDescriptionInfo(BaseModel):
+    id: int
+    title: str
+
+
 class AnalysisResponse(BaseModel):
     id :int 
     user_id:int
-    resume_id:int
-    job_description_id:int
+    resume_id: int
+    job_description_id: int
 
+    resume: ResumeInfo
+    job_description: JobDescriptionInfo
+    
     ats_score:int
     coverage: int | None
 

@@ -129,7 +129,10 @@ export default function UploadResume({ onClose }) {
                     </div>
 
                     <button
-                        onClick={onClose}
+                        type = "button"
+                        onClick={()=>{
+                            console.log("CLOSE");
+                            onClose();}}
                         className="p-2 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition"
                     >
                         <X size={20} />

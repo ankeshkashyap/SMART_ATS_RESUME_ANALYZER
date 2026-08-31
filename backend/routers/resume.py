@@ -20,8 +20,6 @@ MAX_FILE_SIZE = 10*1024*1024
 UPLOAD_DIR =Path(__file__).resolve().parent.parent / "uploads"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 @router.post("/upload")
-
-
 async def upload_resume(file: UploadFile= File(...),
                         db: Session = Depends(get_db),
                         current_user: User= Depends(get_current_user)):
@@ -93,3 +91,26 @@ async def upload_resume(file: UploadFile= File(...),
             }
         }
     }
+
+@router.get("/")
+def get_resumes(
+        db:Session = Depends(get_db),
+        current_user :User = Depends (get_current_user)):
+        resumes=(
+        db.query(Resume)
+        .filter(
+            Resume.user_id == current_user.id
+        )
+        .order_by(Resume.uploaded_at.desc())
+        .all()
+)
+        return[
+        {
+            "id":resume.id,
+            "filename": resume.original_filename,
+            "file_type":resume.file_type,
+            "file_size":resume.file_size,
+            "uploaded_at":resume.uploaded_at
+        }
+        for resume in resumes
+    ]

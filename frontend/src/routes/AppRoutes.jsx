@@ -4,10 +4,9 @@ import Signup from "../pages/Signup";
 import Login from "../pages/Login"
 import Dashboard from "../pages/Dashboard";
 import ProtectedRoute from "../components/ProtectedRoute";
-import UploadResume from "../pages/UploadResume";
 import JobDescription from "../pages/JobDescription";
 import Analysis from "../pages/Analysis";
-
+import Analyze from "../pages/Analyze";
 function AppRoutes() {
     return (
         <BrowserRouter>
@@ -34,19 +33,18 @@ function AppRoutes() {
                     <Dashboard />/
                 </ProtectedRoute>}
                 />
-                <Route 
-                path="/upload"
-                element={<UploadResume />} 
-                />
-
+                
                 <Route path = "/job-description"
                 element = {<JobDescription />} />
                 
                  <Route
-                path="/analysis"
+                path="/analysis/:analysisID"
                 element={<Analysis/>}/>
                 
-                
+                <Route
+                path="/analyze"
+                element={<Analyze/>}/>
+
                 </Routes>
                 
         </BrowserRouter>

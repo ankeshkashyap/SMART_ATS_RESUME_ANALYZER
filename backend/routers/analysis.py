@@ -30,12 +30,43 @@ def create_new_analysis (
         job_description_id= request.job_description_id
     )
 
-    if error :
+    if error or analysis is None:
         raise HTTPException(
             status_code=404,
-            detail=error
+            detail=error or "Failed to create analysis"
         )
-    return analysis
+
+    return {
+    "id": analysis.id,
+    "user_id": analysis.user_id,
+
+    "resume_id": analysis.resume_id,
+    "job_description_id": analysis.job_description_id,
+
+    "resume": {
+        "id": analysis.resume.id,
+        "filename": analysis.resume.original_filename
+    },
+
+    "job_description": {
+        "id": analysis.job_description.id,
+        "title": analysis.job_description.title
+    },
+
+    "ats_score": analysis.ats_score,
+    "coverage": analysis.coverage,
+
+    "breakdown": analysis.breakdown,
+
+    "matched_keywords": analysis.matched_keywords,
+    "missing_keywords": analysis.missing_keywords,
+
+    "matched_skills": analysis.matched_skills,
+    "missing_skills": analysis.missing_skills,
+
+    "strengths": analysis.strengths,
+    "weaknesses": analysis.weaknesses
+}
 
 @router.get("/{analysis_id}",response_model=AnalysisResponse)
 def get_analysis(
@@ -43,11 +74,6 @@ def get_analysis(
     db: Session = Depends (get_db),
     current_user: User = Depends (get_current_user)
 ):
-
-    print("CURRENT USER:", current_user)
-    print("CURRENT USER ID:", current_user.id)
-    print("ANALYSIS ID:", analysis_id)
-
 
     analysis = (
         db.query (Analysis)
@@ -58,7 +84,6 @@ def get_analysis(
         .first()
     )
 
-    print("FOUND ANALYSIS:", analysis)
 
     if not analysis :
         raise HTTPException (
@@ -66,5 +91,35 @@ def get_analysis(
             detail = "Analysis not found"
         )
 
-    return analysis
+    return {
+         "id": analysis.id,
+    "user_id": analysis.user_id,
+
+    "resume_id": analysis.resume_id,
+    "job_description_id": analysis.job_description_id,
+
+    "resume": {
+        "id": analysis.resume.id,
+        "filename": analysis.resume.original_filename
+    },
+
+    "job_description": {
+        "id": analysis.job_description.id,
+        "title": analysis.job_description.title
+    },
+
+    "ats_score": analysis.ats_score,
+    "coverage": analysis.coverage,
+
+    "breakdown": analysis.breakdown,
+
+    "matched_keywords": analysis.matched_keywords,
+    "missing_keywords": analysis.missing_keywords,
+
+    "matched_skills": analysis.matched_skills,
+    "missing_skills": analysis.missing_skills,
+
+    "strengths": analysis.strengths,
+    "weaknesses": analysis.weaknesses
+    }
     

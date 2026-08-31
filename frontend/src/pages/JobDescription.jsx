@@ -157,7 +157,7 @@ function JobDescription() {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g. Python Backend Developer"
-                    className="h-11 w-full rounded-md border border-[#cfd5dd] bg-white px-3 text-sm text-[#172b4d] outline-none transition placeholder:text-[#98a2b3] focus:border-[#ff9900] focus:ring-2 focus:ring-[#ff9900]/15"
+                    className="h-11 w-full rounded-md border border-[#cfd5dd] bg-white px-3 text-sm text-[#172b4d] outline-none transition placeholder:text-[#98a2b3] focus:border-primary focus:ring-2 focus:ring-primary/15"
                 />
 
             </div>
@@ -187,7 +187,7 @@ function JobDescription() {
                     onChange={handleDescriptionChange}
                     placeholder="Paste the job description here..."
                     rows={15}
-                    className="w-full resize-y rounded-md border border-[#cfd5dd] bg-white px-3 py-3 text-sm leading-6 text-[#172b4d] outline-none transition placeholder:text-[#98a2b3] focus:border-[#ff9900] focus:ring-2 focus:ring-[#ff9900]/15"
+                    className="w-full resize-y rounded-md border border-[#cfd5dd] bg-white px-3 py-3 text-sm leading-6 text-[#172b4d] outline-none transition placeholder:text-[#98a2b3] focus:border-primary focus:ring-2 focus:ring-primary/15"
                 />
 
             </div>
@@ -303,7 +303,7 @@ function JobDescription() {
 
         ) : (
 
-            <div className="divide-y divide-[#e5e7eb] rounded-lg border border-[#dfe3e8] bg-white">
+            <div className="divide-y divide-border rounded-lg border border-[#dfe3e8] bg-white">
 
                 {jobDescriptions.map((jd) => (
 
