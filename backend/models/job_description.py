@@ -1,5 +1,6 @@
 from sqlalchemy import Column , Integer , String , Text , TIMESTAMP , ForeignKey, text, JSON
 from database.base import Base
+from sqlalchemy.orm import relationship
 
 class JobDescription (Base):
     __tablename__ = "job_descriptions"
@@ -35,4 +36,9 @@ class JobDescription (Base):
     created_at = Column (
         TIMESTAMP,
         server_default=text ("CURRENT_TIMESTAMP")
+    )
+    analyses = relationship(
+        "Analysis",
+        back_populates="job_description",
+        cascade="all, delete-orphan"
     )

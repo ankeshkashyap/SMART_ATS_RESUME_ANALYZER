@@ -1,6 +1,5 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-
+from skill_matcher import SkillMatcher
+from combined_matcher import CombinedMatcher
 WEIGHTS={
     "keyword_match":0.25,
     "skills":0.25,
@@ -8,7 +7,7 @@ WEIGHTS={
     "education":0.10,
     "formatting":0.10,
     "grammar":0.05,
-    "similarity":0.10
+    "semantic_coverage":0.10
 }
 
 def keyword_match(resume_text, jd_keywords):
@@ -42,17 +41,14 @@ def keyword_match(resume_text, jd_keywords):
 
 
 def skills_match(resume_text, required_skills):
-    resume_text = resume_text.lower()
+    matcher  = SkillMatcher()
+    result = matcher.find_skill_variants(
+        resume_text,
+        required_skills
+    )
 
-    matched_skills = []
-    missing_skils= []
-    for skill in required_skills :
-        skill = skill.lower().strip()
-
-        if skill in resume_text:
-            matched_skills.append (skill)
-        else:
-            missing_skils.append(skill)
+    matched_skills = result["matched"]
+    missing_skills = result["unmatched"]
 
     total_skills = len(required_skills)
 
@@ -65,7 +61,7 @@ def skills_match(resume_text, required_skills):
     return{
         "score": round(score),
         "matched_skills": matched_skills,
-        "missing_skills":missing_skils
+        "missing_skills":missing_skills
     }
 
 def experience_score (candidate_years, required_years):
@@ -141,35 +137,6 @@ def grammar_score(grammar_issues):
     score = 100 - (len(grammar_issues)* penalty_per_issue)
     return max(0, score)
 
-def similarity_score(resume_text : str , job_description: str) -> int:
-
-    if not resume_text.strip() or not job_description.strip():
-        return 0 
-
-    documents = [
-        resume_text,
-        job_description
-    ]
-
-    vectorizer = TfidfVectorizer(
-        stop_words="english",
-        ngram_range=(1,2)
-    )
-
-    try:
-        tfidf_matrix = vectorizer.fit_transform(documents)
-
-    except ValueError:
-        return 0
-
-    similarity = cosine_similarity (
-        tfidf_matrix.getrow(0),
-        tfidf_matrix.getrow(1)
-    )[0][0]
-
-    score = similarity*100
-    return round(score)
-
 def calculate_final_score(scores):
     final_score=0
     for category,weight in WEIGHTS.items():
@@ -207,13 +174,14 @@ def run_ats_analysis(
     resume_text,
     jd_keywords,
     required_skills,
+    requirements,
     candidate_years,
     required_years,
     resume_education,
     required_education,
     resume_data,
     grammar_issues,
-    job_description
+    job_description,
 ):
     
     keyword_result = keyword_match(
@@ -249,12 +217,11 @@ def run_ats_analysis(
         grammar_issues
     )
 
-    
-    similarity = similarity_score(
-        resume_text,
-        job_description
-    )
+    combined_matcher = CombinedMatcher()
 
+    matching_result = combined_matcher.analyze( resume_text, required_skills , requirements)
+
+    semantic_coverage = matching_result["coverage"]["coverage"] 
  
     scores = {
         "keyword_match": keyword_result["score"],
@@ -263,7 +230,7 @@ def run_ats_analysis(
         "education": education,
         "formatting": formatting,
         "grammar": grammar,
-        "similarity": similarity
+        "semantic_coverage": round(semantic_coverage)
     }
 
 
@@ -282,9 +249,121 @@ def run_ats_analysis(
         "matched_keywords": keyword_result["matched_keywords"],
         "missing_keywords": keyword_result["missing_keywords"],
         "matched_skills": skills_result["matched_skills"],
-        "missing_skills": skills_result["missing_skills"]
+        "missing_skills": skills_result["missing_skills"],
+        "semantic_matching":matching_result
     }
 
 
 
 
+if __name__ == "__main__":
+
+    resume_text = """
+    Ankesh Kashyap
+
+    B.Tech Computer Science Engineering
+
+    Skills:
+    Python, FastAPI, React, PostgreSQL, Docker
+
+    Experience:
+    Developed REST APIs using FastAPI and Python.
+    Built frontend applications using React.js.
+    Designed and managed PostgreSQL databases.
+    Deployed applications using Docker.
+
+    Education:
+    B.Tech in Computer Science Engineering
+    """
+
+    jd_keywords = [
+        "python",
+        "fastapi",
+        "react",
+        "postgresql",
+        "docker",
+        "machine learning"
+    ]
+
+    required_skills = [
+        "python",
+        "fastapi",
+        "react",
+        "postgresql",
+        "docker",
+        "machine learning"
+    ]
+
+    requirements = [
+        "Experience developing REST APIs",
+        "Experience with containerized deployment",
+        "Experience with frontend React development",
+        "Experience with Kubernetes"
+    ]
+
+    candidate_years = 1
+    required_years = 2
+
+    resume_education = "B.Tech in Computer Science Engineering"
+    required_education = "Bachelor's degree in Computer Science"
+
+    resume_data = {
+        "has_contact": True,
+        "has_summary": True,
+        "has_skills": True,
+        "has_experience": True,
+        "has_education": True,
+        "standard_headings": True
+    }
+
+    grammar_issues = []
+
+    job_description = """
+    We are looking for a software engineer with experience in
+    Python, FastAPI, React, PostgreSQL and Docker.
+
+    The candidate should have experience developing REST APIs,
+    building frontend applications using React, containerized
+    deployment and Kubernetes.
+
+    Knowledge of machine learning is a plus.
+    """
+
+    result = run_ats_analysis(
+        resume_text=resume_text,
+        jd_keywords=jd_keywords,
+        required_skills=required_skills,
+        requirements=requirements,
+        candidate_years=candidate_years,
+        required_years=required_years,
+        resume_education=resume_education,
+        required_education=required_education,
+        resume_data=resume_data,
+        grammar_issues=grammar_issues,
+        job_description=job_description
+    )
+
+    print("\n========== ATS SCORE ==========")
+    print(result["ats_score"])
+
+    print("\n========== COVERAGE ==========")
+    print(result["coverage"])
+
+    print("\n========== BREAKDOWN ==========")
+    for key, value in result["breakdown"].items():
+        print(f"{key}: {value}")
+
+    print("\n========== MATCHED KEYWORDS ==========")
+    print(result["matched_keywords"])
+
+    print("\n========== MISSING KEYWORDS ==========")
+    print(result["missing_keywords"])
+
+    print("\n========== MATCHED SKILLS ==========")
+    print(result["matched_skills"])
+
+    print("\n========== MISSING SKILLS ==========")
+    print(result["missing_skills"])
+
+    print("\n========== SEMANTIC MATCHING ==========")
+    print(result["semantic_matching"])
