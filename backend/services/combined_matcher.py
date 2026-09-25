@@ -1,7 +1,7 @@
-from skill_matcher import SkillMatcher
-from requirements_matcher import RequirementMatcher
-from match_classifier import MatchClassifier
-from coverage_calculator import CoverageCalculator
+from services.skill_matcher import SkillMatcher
+from services.requirements_matcher import RequirementMatcher
+from services.match_classifier import MatchClassifier
+from services.coverage_calculator import CoverageCalculator
 
 class CombinedMatcher :
     def __init__(self):

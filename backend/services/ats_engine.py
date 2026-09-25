@@ -1,5 +1,5 @@
-from skill_matcher import SkillMatcher
-from combined_matcher import CombinedMatcher
+from services.skill_matcher import SkillMatcher
+from services.combined_matcher import CombinedMatcher
 WEIGHTS={
     "keyword_match":0.25,
     "skills":0.25,

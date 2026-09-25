@@ -31,12 +31,15 @@ class ATSRequest(BaseModel):
 
     grammar_issues: List[str]
 
+    requirements: List[str]
+
 @router.post("/score")
 def calculate_ats (request: ATSRequest):
     result = run_ats_analysis(
         resume_text=request.resume_text,
         jd_keywords=request.jd_keywords,
         required_skills=request.required_skills,
+        requirements= request.requirements,
         candidate_years=request.candidate_years,
         required_years=request.required_years,
         resume_education=request.resume_education,

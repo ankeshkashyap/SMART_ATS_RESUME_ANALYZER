@@ -1,5 +1,5 @@
 from rapidfuzz import fuzz 
-from skill_variants import SKILL_VARIANTS
+from services.skill_variants import SKILL_VARIANTS
 
 class SkillMatcher :
 

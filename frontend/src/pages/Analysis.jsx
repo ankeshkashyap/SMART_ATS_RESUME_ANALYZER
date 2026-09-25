@@ -9,6 +9,7 @@ const Analysis = () => {
     const [analysis, setAnalysis] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [aiSuggestions , setAiSuggestions] = useState(null);
 
     useEffect(() => {
         const fetchAnalysis = async () => {
@@ -21,6 +22,11 @@ const Analysis = () => {
                 );
 
                 setAnalysis(response.data);
+
+                const aiResponse = await api.post(`/ai-suggestions/${analysisID}`);
+
+                setAiSuggestions(aiResponse.data);
+
 
             } catch (error) {
                 console.error(
@@ -505,8 +511,195 @@ const Analysis = () => {
                     </div>
 
                 </div>
+                {/* AI SUGGESTIONS */}
 
+        {aiSuggestions && (
+            <div className="mb-6 rounded-card border border-primary/30 bg-card p-6 shadow-sm">
 
+                <div className="mb-6">
+                    <p className="text-xs font-bold uppercase tracking-wider text-primary">
+                        AI-Powered Feedback
+                    </p>
+
+                    <h2 className="mt-1 text-2xl font-bold text-text-primary">
+                        Resume Improvement Suggestions
+                    </h2>
+
+                    <p className="mt-2 text-sm text-text-secondary">
+                        Personalized suggestions based on your resume and the selected job description.
+                    </p>
+                </div>
+
+                {/* MISSING KEYWORDS */}
+
+                <div className="mb-6">
+                            <h3 className="text-lg font-bold text-text-primary">
+                                Missing Keywords
+                            </h3>
+
+                    <div className="mt-4 space-y-3">
+                        {aiSuggestions.missing_keywords?.map((item, index) => (
+                            <div
+                                key={index}
+                                className="rounded-lg border border-border bg-background p-4"
+                            >
+                                <p className="font-semibold text-text-primary">
+                                    {item.keyword}
+                                </p>
+
+                                <p className="mt-1 text-sm text-text-secondary">
+                                    {item.reason}
+                                </p>
+
+                                <p className="mt-2 text-sm text-primary">
+                                    <span className="font-semibold">Action:</span>{" "}
+                                    {item.action}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                {/* WEAK BULLETS */}
+
+<div className="mb-6">
+    <h3 className="text-lg font-bold text-text-primary">
+        Weak Resume Bullets
+    </h3>
+
+    <div className="mt-4 space-y-4">
+        {aiSuggestions.weak_bullets?.map((item, index) => (
+                    <div
+                        key={index}
+                        className="rounded-lg border border-border bg-background p-4"
+                    >
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-wide text-text-secondary">
+                                Original
+                            </p>
+
+                            <p className="mt-1 text-sm text-text-primary">
+                                {item.original}
+                            </p>
+                        </div>
+
+                        <div className="mt-4">
+                            <p className="text-xs font-semibold uppercase tracking-wide text-danger">
+                                Problem
+                            </p>
+
+                            <p className="mt-1 text-sm text-text-secondary">
+                                {item.problem}
+                            </p>
+                        </div>
+
+                        <div className="mt-4">
+                            <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                                Suggested Rewrite
+                            </p>
+
+                            <p className="mt-1 text-sm font-medium text-text-primary">
+                                {item.suggestion}
+                            </p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+
+            </div>
+        )}
+        {/* GRAMMAR SUGGESTIONS */}
+
+<div className="mb-6">
+            <h3 className="text-lg font-bold text-text-primary">
+                Grammar Suggestions
+            </h3>
+
+            <div className="mt-4 space-y-3">
+                {aiSuggestions.grammar_suggestions?.map((item, index) => (
+                    <div
+                        key={index}
+                        className="rounded-lg border border-border bg-background p-4"
+                    >
+                        <p className="text-xs font-semibold uppercase tracking-wide text-text-secondary">
+                            Original
+                        </p>
+
+                        <p className="mt-1 text-sm text-text-secondary">
+                            {item.original}
+                        </p>
+
+                        <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-primary">
+                            Suggested Correction
+                        </p>
+
+                        <p className="mt-1 text-sm font-medium text-text-primary">
+                            {item.suggestion}
+                        </p>
+                    </div>
+                ))}
+            </div>
+        </div>
+        {/* PROJECT IMPROVEMENTS */}
+
+        <div className="mb-6">
+            <h3 className="text-lg font-bold text-text-primary">
+                Project Improvements
+            </h3>
+
+            <div className="mt-4 space-y-3">
+                {aiSuggestions.project_improvements?.map((item, index) => (
+                    <div
+                        key={index}
+                        className="rounded-lg border border-border bg-background p-4"
+                    >
+                        <p className="font-semibold text-text-primary">
+                            {item.project}
+                        </p>
+
+                        <p className="mt-2 text-sm leading-6 text-text-secondary">
+                            {item.suggestion}
+                        </p>
+                    </div>
+                ))}
+            </div>
+        </div>
+        {/* SUMMARY IMPROVEMENTS */}
+
+        <div className="mb-6">
+            <h3 className="text-lg font-bold text-text-primary">
+                Summary Improvements
+            </h3>
+
+            <div className="mt-4 space-y-4">
+                {aiSuggestions.summary_improvements?.map((item, index) => (
+                    <div
+                        key={index}
+                        className="rounded-lg border border-border bg-background p-4"
+                    >
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-wide text-text-secondary">
+                                Current Summary
+                            </p>
+
+                            <p className="mt-1 text-sm leading-6 text-text-secondary">
+                                {item.current}
+                            </p>
+                        </div>
+
+                        <div className="mt-4">
+                            <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                                Suggested Summary
+                            </p>
+
+                            <p className="mt-1 text-sm font-medium leading-6 text-text-primary">
+                                {item.suggestion}
+                            </p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
                 {/* RECOMMENDATION */}
 
                 <div className="rounded-card border border-primary/30 bg-primary/5 p-6 shadow-sm">
