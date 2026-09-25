@@ -10,6 +10,8 @@ const Analysis = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [aiSuggestions , setAiSuggestions] = useState(null);
+    const [aiLoading , setAiLoading] = useState(false);
+    const [aiError, setAiError] = useState("");
 
     useEffect(() => {
         const fetchAnalysis = async () => {
@@ -22,11 +24,25 @@ const Analysis = () => {
                 );
 
                 setAnalysis(response.data);
+                setAnalysis(response.data);
 
-                const aiResponse = await api.post(`/ai-suggestions/${analysisID}`);
+        setAiLoading(true);
+        setAiError("");
 
-                setAiSuggestions(aiResponse.data);
+        try {
+            const aiResponse = await api.post(`/ai-suggestions/${analysisID}`);
+            setAiSuggestions(aiResponse.data);
+        } catch (aiError) {
+            console.error("Failed to generate AI suggestions:", aiError);
 
+            if (aiError.response?.data?.detail) {
+                setAiError(aiError.response.data.detail);
+            } else {
+                setAiError("Failed to generate AI suggestions.");
+            }
+        } finally {
+            setAiLoading(false);
+        }
 
             } catch (error) {
                 console.error(
@@ -42,6 +58,7 @@ const Analysis = () => {
 
             } finally {
                 setLoading(false);
+                setAiLoading(false)
             }
         };
 
@@ -50,16 +67,60 @@ const Analysis = () => {
 
 
     if (loading) {
-        return (
-            <div className="min-h-screen bg-background px-4 py-10">
-                <div className="mx-auto max-w-6xl">
-                    <p className="text-sm text-text-secondary">
-                        Loading analysis...
-                    </p>
+    return (
+        <div className="min-h-screen bg-background px-4 py-10">
+            <div className="mx-auto flex min-h-[70vh] max-w-6xl items-center justify-center">
+
+                <div className="relative h-[65px] w-[65px]">
+                    <span className="absolute inset-0 rounded-[50px] shadow-[inset_0_0_0_3px] shadow-gray-800  animate-loaderAnim" />
+
+                    <span className="absolute inset-0 rounded-[50px] shadow-[inset_0_0_0_3px] shadow-gray-800 animate-loaderAnim animation-delay" />
                 </div>
+
+                <style>{`
+                    @keyframes loaderAnim {
+                        0% {
+                            inset: 0 35px 35px 0;
+                        }
+                        12.5% {
+                            inset: 0 35px 0 0;
+                        }
+                        25% {
+                            inset: 35px 35px 0 0;
+                        }
+                        37.5% {
+                            inset: 35px 0 0 0;
+                        }
+                        50% {
+                            inset: 35px 0 0 35px;
+                        }
+                        62.5% {
+                            inset: 0 0 0 35px;
+                        }
+                        75% {
+                            inset: 0 0 35px 35px;
+                        }
+                        87.5% {
+                            inset: 0 0 35px 0;
+                        }
+                        100% {
+                            inset: 0 35px 35px 0;
+                        }
+                    }
+
+                    .animate-loaderAnim {
+                        animation: loaderAnim 2.5s infinite;
+                    }
+
+                    .animation-delay {
+                        animation-delay: -1.25s;
+                    }
+                `}</style>
+
             </div>
-        );
-    }
+        </div>
+    );
+}
 
 
     if (error) {
@@ -513,25 +574,52 @@ const Analysis = () => {
                 </div>
                 {/* AI SUGGESTIONS */}
 
-        {aiSuggestions && (
-            <div className="mb-6 rounded-card border border-primary/30 bg-card p-6 shadow-sm">
+        <div className="mb-6 rounded-card border border-primary/30 bg-card p-6 shadow-sm">
 
-                <div className="mb-6">
-                    <p className="text-xs font-bold uppercase tracking-wider text-primary">
-                        AI-Powered Feedback
+            <div className="mb-6">
+                <p className="text-xs font-bold uppercase tracking-wider text-primary">
+                    AI-Powered Feedback
+                </p>
+
+                <h2 className="mt-1 text-2xl font-bold text-text-primary">
+                    Resume Improvement Suggestions
+                </h2>
+
+                <p className="mt-2 text-sm text-text-secondary">
+                    Personalized suggestions based on your resume and the selected job description.
+                </p>
+            </div>
+
+            {aiLoading && (
+                    <div className="rounded-lg border border-border bg-background p-5">
+
+                    <p className="text-sm font-medium text-text-primary">
+                        Generating AI-powered suggestions...
                     </p>
 
-                    <h2 className="mt-1 text-2xl font-bold text-text-primary">
-                        Resume Improvement Suggestions
-                    </h2>
-
-                    <p className="mt-2 text-sm text-text-secondary">
-                        Personalized suggestions based on your resume and the selected job description.
+                    <p className="mt-1 text-sm text-text-secondary">
+                        This may take a few seconds.
                     </p>
                 </div>
+            )}
+
+            {!aiLoading && aiError && (
+                <div className="rounded-lg border border-danger/30 bg-danger/10 p-4">
+                    <p className="text-sm font-semibold text-danger">
+                        AI suggestions could not be generated.
+                    </p>
+
+                    <p className="mt-1 text-sm text-text-secondary">
+                        {aiError}
+                    </p>
+                </div>
+            )}
+
+        {!aiLoading && aiSuggestions && (
+            <>
 
                 {/* MISSING KEYWORDS */}
-
+                {(aiSuggestions.missing_keywords?.length>0)?(
                 <div className="mb-6">
                             <h3 className="text-lg font-bold text-text-primary">
                                 Missing Keywords
@@ -558,7 +646,16 @@ const Analysis = () => {
                             </div>
                         ))}
                     </div>
+                </div>)
+                :
+                (
+                <div className="rounded-lg border border-border bg-background p-4">
+                    <p className="text-sm text-text-secondary">
+                        No Missing keywords detected.
+                    </p>
                 </div>
+        )
+                    }
                 {/* WEAK BULLETS */}
 
 <div className="mb-6">
@@ -606,17 +703,13 @@ const Analysis = () => {
             </div>
         </div>
 
-            </div>
-        )}
         {/* GRAMMAR SUGGESTIONS */}
-
-<div className="mb-6">
+        <div className="mt-4 space-y-3">
             <h3 className="text-lg font-bold text-text-primary">
                 Grammar Suggestions
             </h3>
-
-            <div className="mt-4 space-y-3">
-                {aiSuggestions.grammar_suggestions?.map((item, index) => (
+            {aiSuggestions.grammar_suggestions?.length > 0 ? (
+                aiSuggestions.grammar_suggestions.map((item, index) => (
                     <div
                         key={index}
                         className="rounded-lg border border-border bg-background p-4"
@@ -637,8 +730,14 @@ const Analysis = () => {
                             {item.suggestion}
                         </p>
                     </div>
-                ))}
-            </div>
+                ))
+            ) : (
+                <div className="rounded-lg border border-border bg-background p-4">
+                    <p className="text-sm text-text-secondary">
+                        No grammar issues detected.
+                    </p>
+                </div>
+            )}
         </div>
         {/* PROJECT IMPROVEMENTS */}
 
@@ -715,10 +814,11 @@ const Analysis = () => {
                     </p>
 
                 </div>
-
-            </div>
-
-        </div>
+                </>
+        )}
+                </div>
+                </div>
+                </div>
     );
 };
 

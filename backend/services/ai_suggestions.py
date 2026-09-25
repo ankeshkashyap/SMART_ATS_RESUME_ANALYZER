@@ -74,8 +74,25 @@ IMPORTANT RULES:
 6. For resume bullet improvements, preserve the factual meaning
    of the original bullet.
 
-7. Return useful suggestions only. If a category has no meaningful
-   suggestion, return an empty list.
+7. Return useful suggestions only.
+
+7. Return useful suggestions only.
+
+8. For grammar_suggestions, carefully inspect the resume for:
+   - incorrect verb tense
+   - sentence fragments
+   - subject-verb agreement
+   - punctuation
+   - articles and prepositions
+   - awkward or incorrect sentence construction
+   - inconsistent grammatical structure
+
+   If there is a genuine grammar or sentence-structure issue,
+   return a specific correction.
+
+   Do not classify general resume improvements as grammar issues.
+
+9. If there are genuinely no grammar issues, return an empty list.
 
 Analyze the resume and return suggestions for:
 - Missing keywords

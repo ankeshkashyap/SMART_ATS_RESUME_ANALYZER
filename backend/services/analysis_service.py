@@ -89,10 +89,16 @@ def create_analysis(
 
     jd_keywords = job_description.keywords or []
 
+    requirements = [
+        line.strip()
+        for line in job_description.description.split("\n")
+        if line.strip()
+    ]
     result = run_ats_analysis(
         resume_text=resume.resume_text or "",
         jd_keywords=jd_keywords,
         required_skills=required_skills,
+        requirements=requirements,
         candidate_years=candidate_years,
         required_years=required_years,
         resume_education=resume_education,
