@@ -71,7 +71,7 @@ const Analysis = () => {
         <div className="min-h-screen bg-background px-4 py-10">
             <div className="mx-auto flex min-h-[70vh] max-w-6xl items-center justify-center">
 
-                <div className="relative h-[65px] w-[65px]">
+                <div className="relative h-16.5 w-16.25">
                     <span className="absolute inset-0 rounded-[50px] shadow-[inset_0_0_0_3px] shadow-gray-800  animate-loaderAnim" />
 
                     <span className="absolute inset-0 rounded-[50px] shadow-[inset_0_0_0_3px] shadow-gray-800 animate-loaderAnim animation-delay" />

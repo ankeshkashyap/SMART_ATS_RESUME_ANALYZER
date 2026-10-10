@@ -1,24 +1,37 @@
-import {LayoutDashboard, Upload, History, BarChart3, User, Settings, } from "lucide-react";
-
+import {LayoutDashboard, FileText , Briefcase, History, BarChart3, User, Settings, } from "lucide-react";
+import { useNavigate , useLocation } from "react-router-dom";
 export default function Sidebar (){
+    const navigate = useNavigate();
+    const location = useLocation();
     const menuItems=[
         {name:"Dashboard",
-        icon:LayoutDashboard 
+        icon:LayoutDashboard,
+        path:"/dashboard" 
         },
-        {name:"Upload Resume",
-            icon:Upload,
+        {   name:"Resume",
+            icon:FileText,
+            path:"/resume"
         },
-        {name:"History",
+        {   name:"Job Description",
+            icon:Briefcase,
+            path:"/jd-history"
+        },
+        
+        {   name:"Analysis History",
             icon:History,
+            path:"/analysis-history"
         },
-        {name:"Analytics",
+        {   name:"Analytics",
             icon:BarChart3,
+            path:"/analytics"
         },
         {name:"Profile",
          icon:User,
+         path:"/profile"
         },
         {name:"Settings",
          icon:Settings,
+         path:"/settings"
         },
     ];
     return (
@@ -28,8 +41,9 @@ export default function Sidebar (){
                {menuItems.map((item)=> {
                     const Icon = item.icon;
                     return (
-                    <li key={item.name} className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-200 ${
-                        item.name === "Dashboard"? "bg-orange-50 border-l-4 border-primary text-gray-900 font-semibold"
+                    <li key={item.name} onClick= {()=> navigate(item.path)} className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-200 ${
+
+                        location.pathname==item.path? "bg-orange-50 border-l-4 border-primary text-gray-900 font-semibold"
                                         : "text-gray-600 hover:bg-gray-100 hover:text-black"
                                 }`}>
                                     <Icon size={20} />

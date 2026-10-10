@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../../context/UserContext";
 
-export default function DashboadHeader({user , onUploadClick}){
+export default function DashboadHeader({ onUploadClick}){
     
 const navigate = useNavigate();
+const user = useUser()
 
     return(
         <section className="flex flex-col sm:flex-row  sm:justify-between sm:items-center gap-4">

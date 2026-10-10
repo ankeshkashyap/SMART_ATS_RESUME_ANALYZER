@@ -7,6 +7,8 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import JobDescription from "../pages/JobDescription";
 import Analysis from "../pages/Analysis";
 import Analyze from "../pages/Analyze";
+import JDHistory from "../pages/JDHistory";
+import Resume from "../pages/Resume";
 function AppRoutes() {
     return (
         <BrowserRouter>
@@ -23,29 +25,48 @@ function AppRoutes() {
                 />
 
                 <Route
-                    path="/Login"
+                    path="/login"
                     element={<Login />}
                 />
                 <Route
                 path = "/Dashboard"
                 element={
                 <ProtectedRoute>
-                    <Dashboard />/
+                    <Dashboard />
                 </ProtectedRoute>}
                 />
                 
                 <Route path = "/job-description"
-                element = {<JobDescription />} />
+                element = {
+                    <ProtectedRoute><JobDescription /></ProtectedRoute>
+                
+                } />
                 
                  <Route
                 path="/analysis/:analysisID"
-                element={<Analysis/>}/>
+                element={<ProtectedRoute><Analysis/></ProtectedRoute>}/>
                 
                 <Route
                 path="/analyze"
-                element={<Analyze/>}/>
+                element={<ProtectedRoute><Analyze/></ProtectedRoute>}/>
 
+                
+
+                <Route
+                path="/jd-history"
+                element={<ProtectedRoute><JDHistory/></ProtectedRoute>}/>
+
+                <Route
+                    path="/resume"
+                    element={
+                        <ProtectedRoute>
+                            <Resume />
+                        </ProtectedRoute>
+                    }
+                />
                 </Routes>
+
+                
                 
         </BrowserRouter>
     );
