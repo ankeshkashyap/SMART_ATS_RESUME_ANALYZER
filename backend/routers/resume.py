@@ -114,3 +114,88 @@ def get_resumes(
         }
         for resume in resumes
     ]
+
+@router.get("/{resume_id}")
+def get_resume (
+          resume_id:int,
+          db: Session = Depends(get_db),
+          current_user : User = Depends(get_current_user)
+):
+     resume = (
+     db.query(Resume)
+     .filter(
+          Resume.id == resume_id,
+          Resume.user_id == current_user.id
+     )
+     .first()
+     )
+     if not resume :
+          raise HTTPException(
+               status_code = 404,
+               detail="Resume not Found"
+          )
+
+     return {
+        "id": resume.id,
+        "filename": resume.original_filename,
+        "file_type": resume.file_type,
+        "file_size": resume.file_size,
+        "uploaded_at": resume.uploaded_at,
+        "parsed_resume": {
+            "text": resume.resume_text,
+            "sections": {
+                "summary": resume.summary,
+                "skills": resume.skills,
+                "projects": resume.projects,
+                "experience": resume.experience,
+                "education": resume.education,
+                "achievements": resume.achievements
+            }
+        }
+    }
+
+@router.delete("/{resume_id}")
+def delete_resume(
+          resume_id:int ,
+          db : Session = Depends(get_db),
+          user : User = Depends(get_current_user)
+) :
+     resume = (
+          db.query(Resume)
+          .filter(
+               Resume.id == resume_id,
+               Resume.user_id == user.id
+          ).first()
+     )
+
+     if not resume :
+               raise HTTPException(
+                    status_code = 404,
+                    detail="Resume not Found"
+               )
+
+     file_path = (UPLOAD_DIR / resume.stored_filename).resolve()
+
+     if file_path.parent != UPLOAD_DIR.resolve():
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid resume file path"
+        )
+
+     try:
+        if file_path.exists():
+            file_path.unlink()
+
+        db.delete(resume)
+        db.commit()
+
+     except Exception:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to delete resume"
+        )
+
+     return {
+        "message": "Resume deleted successfully"
+    }

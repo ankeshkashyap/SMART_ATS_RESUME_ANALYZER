@@ -9,6 +9,7 @@ import Analysis from "../pages/Analysis";
 import Analyze from "../pages/Analyze";
 import JDHistory from "../pages/JDHistory";
 import Resume from "../pages/Resume";
+import ResumeDetails from "../pages/ResumeDetails";
 function AppRoutes() {
     return (
         <BrowserRouter>
@@ -57,6 +58,14 @@ function AppRoutes() {
                 element={<ProtectedRoute><JDHistory/></ProtectedRoute>}/>
 
                 <Route
+                    path="/resume/:resumeId"
+                    element={
+                        <ProtectedRoute>
+                            <ResumeDetails />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
                     path="/resume"
                     element={
                         <ProtectedRoute>
@@ -64,6 +73,7 @@ function AppRoutes() {
                         </ProtectedRoute>
                     }
                 />
+
                 </Routes>
 
                 

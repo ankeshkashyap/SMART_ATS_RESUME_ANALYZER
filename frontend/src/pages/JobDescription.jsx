@@ -1,5 +1,8 @@
 import { useState , useEffect } from "react";
 import api from "../services/api";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+
 
 const MAX_LENGTH = 10000;
 
@@ -28,6 +31,7 @@ function JobDescription() {
   const [result, setResult] = useState(null);
   const [jobDescriptions, setJobDescriptions] = useState([]);
   const [deleteID , setDeleteID]= useState(null);
+  const navigate =useNavigate(); 
 
   const fetchJobDescriptions = async () => {
     try {
@@ -59,6 +63,7 @@ function JobDescription() {
   };
 
   const handleDelete = async (id) => {
+    
     try {
         await api.delete (`/job-descriptions/${id}`);
 
@@ -116,7 +121,14 @@ function JobDescription() {
 
   return (
     <div className="min-h-screen bg-[#f7f8fa] px-7 py-8">
-
+    <button
+        type="button"
+        onClick={() => navigate("/dashboard")}
+        className="cursor-pointer mb-6 flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
+        >
+       <ArrowLeft size={16} />
+        Back to DashBoard
+    </button>
     {/* PAGE HEADER */}
     <div className="mb-7 flex items-start justify-between">
 
@@ -381,7 +393,7 @@ function JobDescription() {
                     <button 
                     type="button"
                     onClick={async () => {await handleDelete(deleteID);
-                                                setDeleteID(null);  
+                    setDeleteID(null);  
                     }}
                      className="delete-button"
                 >

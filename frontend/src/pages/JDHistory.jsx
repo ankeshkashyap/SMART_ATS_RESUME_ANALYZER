@@ -6,6 +6,7 @@ function JDHistory() {
     const [JobDescriptions , setJobDescriptions] = useState([]);
     const [loading , setLoading] = useState(true);
     const [error , setError] = useState ("");
+    const [deleteID, setDeleteID] = useState(null);
     const navigate = useNavigate();
 
     useEffect(()=> {
@@ -28,6 +29,7 @@ function JDHistory() {
     },[]);
 
     const handleDelete = async (jdId) => {
+        
         try {
             await api.delete(`/job-descriptions/${jdId}`);
 
@@ -94,7 +96,7 @@ function JDHistory() {
                                 </p>
                                 <div className="mt-4 flex justify-end">
                                     <button 
-                                        onClick={()=> handleDelete(jd.id)}
+                                        onClick={()=> setDeleteID(jd.id)}
                                         className="delete-button">
                                             Delete
                                         </button>
@@ -103,10 +105,41 @@ function JDHistory() {
 
                         ))}
                     </div>
-
                 )
                 }
                
+                {deleteID&& (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+                            <div className="w-full max-w-md rounded-lg border border-border bg-white p-6 shadow-lg">
+
+                                <h2 className="text-lg font-bold text-text-h">
+                                    Delete Job Description?    
+                                </h2> 
+
+                                <p className="mt-2 text-sm leading-6 text-text-primary">
+                                    This job description will be permanently deleted.
+                                    This action cannot be undone. 
+                                </p>
+                                <div className="mt-6 flex justify-end gap-3">
+                                    <button type="button"
+                                    onClick={()=>setDeleteID(null)}
+                                    className="rounded-md border border-border bg-white px-5 py-2.5 text-sm font-semibold text-text-h transition hover:bg-social-bg">
+                                        Cancel
+                                    </button>
+                                    <button 
+                                    type="button"
+                                    onClick={async () => {await handleDelete(deleteID);
+                                    setDeleteID(null);  
+                                    }}
+                                    className="delete-button"
+                                >
+                                    Delete
+                                </button>
+                                </div>
+                        </div>
+                        </div>
+                    )}
+
             </div>
         </DashboardLayout>
     );
