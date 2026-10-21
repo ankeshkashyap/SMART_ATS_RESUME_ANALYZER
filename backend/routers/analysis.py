@@ -65,8 +65,53 @@ def create_new_analysis (
     "missing_skills": analysis.missing_skills,
 
     "strengths": analysis.strengths,
-    "weaknesses": analysis.weaknesses
+    "weaknesses": analysis.weaknesses,
+
+    "created_at": analysis.created_at,
 }
+
+
+@router.get("/", response_model=list[AnalysisResponse])
+def get_analyses(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    analyses = (
+        db.query(Analysis)
+        .filter(Analysis.user_id == current_user.id)
+        .order_by(Analysis.id.desc())
+        .all()
+    )
+
+    return [
+        {
+            "id": analysis.id,
+            "user_id": analysis.user_id,
+            "resume_id": analysis.resume_id,
+            "job_description_id": analysis.job_description_id,
+            "resume": {
+                "id": analysis.resume.id,
+                "filename": analysis.resume.original_filename
+            },
+            "job_description": {
+                "id": analysis.job_description.id,
+                "title": analysis.job_description.title
+            },
+            "ats_score": analysis.ats_score,
+            "coverage": analysis.coverage,
+            "breakdown": analysis.breakdown,
+            "matched_keywords": analysis.matched_keywords,
+            "missing_keywords": analysis.missing_keywords,
+            "matched_skills": analysis.matched_skills,
+            "missing_skills": analysis.missing_skills,
+            "strengths": analysis.strengths,
+            "weaknesses": analysis.weaknesses,
+
+            "created_at": analysis.created_at,
+        }
+        for analysis in analyses
+    ]
+
 
 @router.get("/{analysis_id}",response_model=AnalysisResponse)
 def get_analysis(
@@ -120,6 +165,37 @@ def get_analysis(
     "missing_skills": analysis.missing_skills,
 
     "strengths": analysis.strengths,
-    "weaknesses": analysis.weaknesses
+    "weaknesses": analysis.weaknesses,
+
+    "created_at": analysis.created_at,
     }
+
+@router.delete("/{analysis_id}")
+
+def delete_analysis(
+        analysis_id: int,
+        db: Session = Depends (get_db),
+        current_user: User = Depends (get_current_user)
+):
+    analysis = (db.query(Analysis)
+                .filter(
+                    Analysis.id == analysis_id,
+                    Analysis.user_id == current_user.id,
+    ).first())
+    
+    if not analysis :
+            raise HTTPException (
+                status_code= 404,
+                detail = "Analysis not found"
+            )
+
+    db.delete(analysis)
+    db.commit()
+
+    return {
+        "message": "Resume deleted successfully"
+    }
+
+    
+
     

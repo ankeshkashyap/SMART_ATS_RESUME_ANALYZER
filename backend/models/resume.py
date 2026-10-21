@@ -1,8 +1,16 @@
-from sqlalchemy import Column, Integer,String,Text , TIMESTAMP, ForeignKey, text
+from sqlalchemy import Column, Integer,String,Text , TIMESTAMP, ForeignKey, UniqueConstraint, text
 from database.base import Base
 
 class Resume(Base):
     __tablename__="resumes"
+
+    __table_args__ = (
+        UniqueConstraint(
+            "user_id",
+            "file_hash",
+            name="uq_resumes_user_file_hash",
+        ),
+    )
 
     id= Column(
         Integer,
@@ -25,6 +33,8 @@ class Resume(Base):
         unique=True,
         nullable=False
     )
+    file_hash = Column(String(64), 
+        nullable=True)
     file_type = Column (
         String(20),
         nullable=False

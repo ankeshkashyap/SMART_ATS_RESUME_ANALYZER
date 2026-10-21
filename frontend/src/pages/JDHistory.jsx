@@ -43,6 +43,9 @@ function JDHistory() {
     return (
         <DashboardLayout >
             <div className="p-8">
+                
+            
+
                 <div className="flex justify-between">
                     <div>
                 <h1 className="text-2xl font-bold text-gray-900">
@@ -57,7 +60,7 @@ function JDHistory() {
                  <button
                 type="button"
                 onClick={() => navigate("/job-description")}
-                className="rounded-md border border-border bg-primary px-5 py-3 text-sm font-semibold text-text-primary shadow-sm transition hover:border-primary hover:text-white"
+                className="cursor-pointer rounded-md bg-primary px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/20"
                 >
                     Add Job Description
                 </button>
@@ -74,9 +77,15 @@ function JDHistory() {
                     </p>
                 )}
                 {!loading && !error && JobDescriptions.length === 0 && (
-                    <p className="mt-8 text-gray-500">
+                    <div>
+                    <div class="null-scene">
+                    <div class="null-word" data-text="NULL">NULL</div>
+                    </div>
+
+                    <p className="mt-8 text-gray-500 text-center">
                         No job Description yet.
                     </p>
+                    </div>
                 )
                 }
                 {!loading && !error && JobDescriptions.length > 0 && (

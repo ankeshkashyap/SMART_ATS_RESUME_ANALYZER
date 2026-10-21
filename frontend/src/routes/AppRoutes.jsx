@@ -10,6 +10,7 @@ import Analyze from "../pages/Analyze";
 import JDHistory from "../pages/JDHistory";
 import Resume from "../pages/Resume";
 import ResumeDetails from "../pages/ResumeDetails";
+import AnalysisHistory from "../pages/AnalysisHistory";
 function AppRoutes() {
     return (
         <BrowserRouter>
@@ -70,6 +71,15 @@ function AppRoutes() {
                     element={
                         <ProtectedRoute>
                             <Resume />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="//analysis-history"
+                    element={
+                        <ProtectedRoute>
+                            <AnalysisHistory />
                         </ProtectedRoute>
                     }
                 />

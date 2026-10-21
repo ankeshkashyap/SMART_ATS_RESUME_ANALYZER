@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Any
+from datetime import datetime
 
 class AnalysisCreate(BaseModel):
     resume_id:int
@@ -36,3 +37,5 @@ class AnalysisResponse(BaseModel):
 
     strengths: list[str] | None
     weaknesses: list[str] | None
+
+    created_at: datetime | None = None

@@ -7,6 +7,7 @@ export default function UploadResume({ onClose }) {
     const [error, setError] = useState("");
     const [uploading, setUploading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [warning , setWarning] = useState("");
 
     const handleFile = (e) => {
         const selectedFile = e.target.files[0];
@@ -25,6 +26,7 @@ export default function UploadResume({ onClose }) {
 
         setError("");
         setSuccess(false);
+        setWarning("")
         setFile(selectedFile);
     };
 
@@ -51,6 +53,7 @@ export default function UploadResume({ onClose }) {
 
         setError("");
         setSuccess(false);
+        setWarning("")
         setFile(droppedFile);
     };
 
@@ -80,6 +83,7 @@ export default function UploadResume({ onClose }) {
 
         setError("");
         setSuccess(false);
+        setWarning("");
         setUploading(true);
 
         const formData = new FormData();
@@ -90,10 +94,15 @@ export default function UploadResume({ onClose }) {
                 "/resume/upload",
                 formData
             );
+            if (response.data.duplicate){
+                setWarning(response.data.message);
+                return;
+            }
 
             console.log("Resume uploaded:", response.data);
 
             setSuccess(true);
+            setFile(null);
         } catch (error) {
             console.error("Upload failed:", error);
 
@@ -193,7 +202,19 @@ export default function UploadResume({ onClose }) {
                         </button>
                     </>
                 )}
-
+                {warning && (
+                    <div
+                        role="alert"
+                        className="mt-6 mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800"
+                    >
+                        <div className="flex items-start gap-2">
+                            <span className="font-semibold">
+                                Warning:
+                            </span>
+                            <span>{warning}</span>
+                        </div>
+                    </div>
+                )}
                 {success && (
                     <div className="mt-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3">
                         <p className="text-sm font-medium text-green-700">

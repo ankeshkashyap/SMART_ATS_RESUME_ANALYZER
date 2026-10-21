@@ -1,31 +1,32 @@
 import { Eye } from "lucide-react";
-export default function RecentAnalyses (){
-    const analyses =[
-        {
-        name : "Ankesh",
-        score:"90%",
-        role:"ML engg.",
-        date:"may 14",
-    },
+import api from "../../../services/api";
+import { useState , useEffect } from "react";
+import { useNavigate } from "react-router-dom"
 
-    {
-        name : "Suraj",
-        score:"85%",
-        role:"Data scientist",
-        date:"may 13",
-    },
-    {
-        name : "Shubham",
-        score:"72%",
-        role:"Cloud Engg.",
-        date:"May 13,2024",
-    },
-    {
-        name : "Tyson",
-        score:"20%",
-        role:"Boxing",
-        date:"11 may",
-    }]
+export default function RecentAnalyses (){
+    const [analyses , setAnalyses]  = useState([]);
+    const [error , setError] = useState("");
+    const [loading , setLoading] = useState(true);
+
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        async function fetchAnalyses(){
+            try {
+                const response = await api.get("/analyses/");
+                setAnalyses(response.data)
+            }
+            catch(error){
+                setError (error.response?.data?.detail|| "Faled to recent analyses.");
+                console.error("Failed to fetch analyses: ",error)
+            }
+
+            finally {
+                setLoading(false)
+            }
+        }
+        fetchAnalyses();
+    },[])
 
     function getScoreStyle(score) {
     const numericScore = parseInt(score);
@@ -48,9 +49,11 @@ export default function RecentAnalyses (){
                  <h2 className="text-xl font-semibold text-gray-900">
                     Recent Analyses
                 </h2>
-                <button className="text-primary font-medium hover:underline">
+                {analyses.length != 0 &&(<button
+                onClick={()=>navigate(`/analysis-history`)}
+                className="text-primary font-medium hover:underline">
                     View All
-                </button>
+                </button>)}
              </div>  
              <div className="overflow-x-auto">
                 <table className="w-full">
@@ -65,29 +68,79 @@ export default function RecentAnalyses (){
                     </tr>
                 </thead>
 
-                <tbody>
-                {analyses.map((analysis)=> (
-                    <tr key={analysis.name}
-                    className="border-t border-gray-500 hover:bg-gray-50 transition">
-                        <td className="px-6 py-4 text-sm text-gray-700">{analysis.name}</td>
+                
+            <tbody>
+                {loading && (
+                    <tr>
+                        <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
+                            Loading analyses...
+                        </td>
+                    </tr>
+                )}
+
+                {!loading && error && (
+                    <tr>
+                        <td colSpan="5" className="px-6 py-8 text-center text-red-500">
+                            {error}
+                        </td>
+                    </tr>
+                )}
+
+                {!loading && !error && analyses.length === 0 && (
+                    <tr>
+                        <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
+                    <div>
+                    <div class="null-scene">
+                    <div class="null-word" data-text="NULL">NULL</div>
+                    </div>
+                    </div>
+                            No analyses found. Analyze a resume to get started.
+                        </td>
+                    </tr>
+                )}
+
+                {!loading && !error && analyses.map((analysis) => (
+                    <tr
+                        key={analysis.id}
+                        className="border-t border-gray-200 hover:bg-gray-50 transition"
+                    >
+                        <td className="px-6 py-4 text-sm text-gray-700">
+                            {analysis.resume?.filename || "Unknown resume"}
+                        </td>
+
                         <td className="px-6 py-4">
                             <span
-                                className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${getScoreStyle(analysis.score)}`}>
-                                {analysis.score}
+                                className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${getScoreStyle(
+                                    `${analysis.ats_score ?? 0}%`
+                                )}`}
+                            >
+                                {analysis.ats_score ?? 0}%
                             </span>
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-700">{analysis.role}</td>
-                        <td className="px-6 py-4 text-sm text-gray-700">{analysis.date}</td>
+
+                        <td className="px-6 py-4 text-sm text-gray-700">
+                            {analysis.job_description?.title || "Unknown role"}
+                        </td>
+
+                        <td className="px-6 py-4 text-sm text-gray-700">
+                            {analysis.created_at
+                                ? new Date(analysis.created_at).toLocaleDateString()
+                                : "N/A"}
+                        </td>
+
                         <td className="px-6 py-4 text-right">
-                            <button title="View analysis"
-                            className="text-gray-500 hover:text-primary-transition">
-                                <Eye size={20}/>
+                            <button
+                                type="button"
+                                title="View analysis"
+                                onClick={() => navigate(`/analysis/${analysis.id}`)}
+                                className="text-gray-500 hover:text-primary transition"
+                            >
+                                <Eye size={20} />
                             </button>
                         </td>
                     </tr>
                 ))}
-
-                </tbody>
+            </tbody>
                 </table>
                 </div>  
            

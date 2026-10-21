@@ -78,6 +78,10 @@ class Analysis (Base):
         JSON ,
         nullable=True
     )
+    created_at = Column(
+    TIMESTAMP,
+    server_default=text("CURRENT_TIMESTAMP")
+)
 
     resume = relationship("Resume")
     

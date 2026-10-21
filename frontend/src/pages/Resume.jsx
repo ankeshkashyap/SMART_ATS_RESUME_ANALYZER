@@ -3,6 +3,8 @@ import DashboardLayout from "../components/common/DashboardLayout";
 import { FileText ,Eye , Trash2 } from "lucide-react";
 import api from "../services/api";
 import { useNavigate } from "react-router-dom";
+import UploadResume from "./UploadResume";
+
 
 function Resume() {
     const [resumes , setResumes ] = useState([]);
@@ -11,6 +13,7 @@ function Resume() {
     const [deleteID, setDeleteID] = useState(null);
     const [deleting, setDeleting] = useState(false);
     const [deleteError, setDeleteError] = useState("");
+    const [uploadOpen , setUploadOpen] = useState(false);
     const navigate = useNavigate();
     
     useEffect(()=>{
@@ -32,16 +35,53 @@ function Resume() {
     },[]);
 
     
+const handleDelete = async () => {
+    setDeleting(true);
+    setDeleteError("");
+
+    try {
+        await api.delete(`/resume/${deleteID}`);
+
+        setResumes((current) =>
+            current.filter((resume) => resume.id !== deleteID)
+        );
+
+        setDeleteID(null);
+    } catch (error) {
+        console.error("Failed to delete resume:", error);
+
+        setDeleteError(
+            error.response?.data?.detail ||
+            "Failed to delete resume. Please try again."
+        );
+    } finally {
+        setDeleting(false);
+    }
+};
+
+
+
+    
     return (
         <DashboardLayout>
-            <div>
-                <h1 className="text-2xl font-bold text-gray-900">
+            <div >
+            <div className="flex flex-col sm:flex-row  sm:justify-between sm:items-center gap-4">
+               < div><h1 className="text-2xl font-bold text-gray-900">
                     My Resumes
                 </h1>
 
                 <p className="mt-2 text-gray-600">
                     Manage your uploaded resumes.
                 </p>
+            </div>
+            <button
+                type="button"
+                onClick={setUploadOpen}
+                className="cursor-pointer rounded-md bg-primary px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/20"
+            >
+                Upload New Resume
+            </button>
+            </div>
 
                 {loading && (
                     <p className="mt-8 text-gray-500">
@@ -56,9 +96,15 @@ function Resume() {
                 )}
 
                 {!loading && !error && resumes.length === 0 && (
-                    <p className="mt-8 text-gray-500">
+                    <div>
+                    <div class="null-scene">
+                    <div class="null-word" data-text="NULL">NULL</div>
+                    </div>
+                    
+                    <p className="mt-8 text-gray-500 text-center">
                         No resumes uploaded yet.
                     </p>
+                    </div>
                 )}
 
                 {!loading && !error && resumes.length > 0 && (
@@ -153,34 +199,7 @@ function Resume() {
                 <button
                     type="button"
                     disabled={deleting}
-                    onClick={async () => {
-                        setDeleting(true);
-                        setDeleteError("");
-
-                        try {
-                            await api.delete(`/resume/${deleteID}`);
-
-                            setResumes((current) =>
-                                current.filter(
-                                    (resume) => resume.id !== deleteID
-                                )
-                            );
-
-                            setDeleteID(null);
-                        } catch (error) {
-                            console.error(
-                                "Failed to delete resume:",
-                                error
-                            );
-
-                            setDeleteError(
-                                error.response?.data?.detail ||
-                                "Failed to delete resume. Please try again."
-                            );
-                        } finally {
-                            setDeleting(false);
-                        }
-                    }}
+                    onClick={handleDelete}
                     className="rounded-md bg-red-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                     {deleting ? "Deleting..." : "Delete"}
@@ -189,7 +208,11 @@ function Resume() {
         </div>
     </div>
 )}
-
+    {uploadOpen&& (
+           <UploadResume 
+            onClose={()=>setUploadOpen(false)}
+            />
+        )}
 
             </div>
         </DashboardLayout>

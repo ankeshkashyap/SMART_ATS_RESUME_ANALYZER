@@ -8,7 +8,7 @@ from database.sessions import get_db
 from routers.auth import get_current_user
 from models.users import User
 from models.resume import Resume
-
+import hashlib
 from parsers.resume_parser import parse_resume
 
 router = APIRouter(
@@ -43,6 +43,42 @@ async def upload_resume(file: UploadFile= File(...),
             detail="File size must be less than 10 MB"
         )
 
+    file_hash = hashlib.sha256(contents).hexdigest()
+
+    existing_resume = (
+        db.query(Resume)
+        .filter(
+            Resume.user_id == current_user.id,
+            Resume.file_hash == file_hash,
+        )
+        .first()
+    )
+
+    if existing_resume :
+            return {
+            "id": existing_resume.id,
+            "filename": file.filename,
+            "stored_filename": existing_resume.stored_filename,
+            "content_type": file.content_type,
+            "size": existing_resume.file_size,
+            "user_id": existing_resume.user_id,
+            "duplicate": True,
+            "message": "This resume has already been uploaded.",
+            "parsed_resume": {
+                "text": existing_resume.resume_text,
+                "sections": {
+                    "summary": existing_resume.summary,
+                    "skills": existing_resume.skills,
+                    "projects": existing_resume.projects,
+                    "experience": existing_resume.experience,
+                    "education": existing_resume.education,
+                    "achievements": existing_resume.achievements,
+                },
+            },
+        }
+
+         
+
     unique_filename = f"{uuid.uuid4()}_{file.filename}"
     file_path= UPLOAD_DIR / unique_filename
     with open(file_path,"wb") as buffer :
@@ -55,6 +91,7 @@ async def upload_resume(file: UploadFile= File(...),
         user_id = current_user.id,
         original_filename=file.filename,
         stored_filename=unique_filename,
+        file_hash=file_hash,
         file_type=extension,
         file_size=len(contents),
 
@@ -78,7 +115,8 @@ async def upload_resume(file: UploadFile= File(...),
         "content_type":file.content_type,
         "size":resume.file_size,
         "user_id":resume.user_id,
-
+        "duplicate": False,
+        "message": "Resume uploaded successfully.",
         "parsed_resume":{
             "text":resume.resume_text,
             "sections": {
