@@ -1,12 +1,16 @@
-from sentence_transformers import SentenceTransformer , util
+from sentence_transformers import SentenceTransformer, util
 
-class RequirementMatcher :
+class RequirementMatcher:
 
     def __init__(self):
+        # Lazy-load: model is ~200MB RAM, defer until first use
+        self._model = None
 
-        self.model = SentenceTransformer (
-            "all-MiniLM-L6-v2"
-        )
+    @property
+    def model(self):
+        if self._model is None:
+            self._model = SentenceTransformer("all-MiniLM-L6-v2")
+        return self._model
 
     def split_into_sentences (self,text):
 

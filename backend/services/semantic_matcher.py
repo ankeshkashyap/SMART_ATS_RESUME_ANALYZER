@@ -1,11 +1,16 @@
 from sentence_transformers import SentenceTransformer
 from rapidfuzz import fuzz
 
-class SemanticMatcher :
+class SemanticMatcher:
     def __init__(self):
-        self.model = SentenceTransformer(
-            "all-MiniLM-l6-v2"
-        )
+        # Lazy-load: model is ~200MB RAM, defer until first use
+        self._model = None
+
+    @property
+    def model(self):
+        if self._model is None:
+            self._model = SentenceTransformer("all-MiniLM-L6-v2")
+        return self._model
 
     def semantic_similarity (self, resume_text , job_description ):
         embeddings = self.model.encode (
