@@ -48,11 +48,11 @@ function JDHistory() {
 
                 <div className="flex justify-between">
                     <div>
-                <h1 className="text-2xl font-bold text-gray-900">
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-text-primary">
                     Job Descriptions
                 </h1>
 
-                <p className="mt-2 text-gray-600">
+                <p className="mt-2 text-gray-600 dark:text-text-secondary">
                     View your previously saved job descriptions.                
                 </p>
                 </div>
@@ -92,11 +92,11 @@ function JDHistory() {
                     <div className="mt-8 space-y-4">
                         {JobDescriptions.map((jd) => (
                             <div key={jd.id}
-                            className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
-                                <h2 className="text-lg font-semibold text-gray-900">
+                            className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm dark:border-border dark:bg-card">
+                                <h2 className="text-lg font-semibold text-gray-900 dark:text-text-primary">
                                     {jd.title}
                                 </h2>
-                                <p className="mt-2 text-sm text-gray-600 line-clamp-3">
+                                <p className="mt-2 text-sm text-gray-600 line-clamp-3 dark:text-text-secondary">
                                     {jd.description}
                                 </p>
                                 <p className="mt-3 text-xs text-gray-400">

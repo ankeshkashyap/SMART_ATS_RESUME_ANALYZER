@@ -121,18 +121,18 @@ export default function UploadResume({ onClose }) {
             onClick={onClose}
         >
             <div
-                className="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-8"
+                className="bg-white dark:bg-background rounded-2xl shadow-xl w-full max-w-2xl p-8"
                 onClick={(e) => e.stopPropagation()}
             >
 
                 <div className="flex items-center justify-between mb-6">
 
                     <div>
-                        <h2 className="text-2xl font-bold text-gray-900">
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-text-primary">
                             Upload Resume
                         </h2>
 
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="text-sm text-gray-500 mt-1 dark:text-text-secondary">
                             Upload your resume to begin the ATS analysis.
                         </p>
                     </div>
@@ -168,15 +168,15 @@ export default function UploadResume({ onClose }) {
                         className="text-primary mb-4"
                     />
 
-                    <p className="text-lg font-medium text-gray-900">
+                    <p className="text-lg font-medium text-gray-900 dark:text-text-primary">
                         Drag & drop your resume here
                     </p>
 
-                    <p className="text-sm text-gray-500 mt-2">
+                    <p className="text-sm text-gray-500 mt-2 dark:text-text-secondary">
                         or click to browse files
                     </p>
 
-                    <p className="text-xs text-gray-400 mt-4">
+                    <p className="text-xs text-gray-400 mt-4 dark:text-text-secondary ">
                         PDF or DOCX • Maximum 10 MB
                     </p>
                 </label>
@@ -216,7 +216,7 @@ export default function UploadResume({ onClose }) {
                     </div>
                 )}
                 {success && (
-                    <div className="mt-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3">
+                    <div className="mt-6 rounded-lg border border-green-200 bg-green-50 dark:bg-card px-4 py-3">
                         <p className="text-sm font-medium text-green-700">
                             Resume uploaded successfully.
                         </p>

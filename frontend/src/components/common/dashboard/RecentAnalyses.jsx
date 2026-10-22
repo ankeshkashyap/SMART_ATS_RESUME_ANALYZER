@@ -43,10 +43,10 @@ export default function RecentAnalyses (){
 }
 
     return (
-        <section className="bg-white rounded-xl border border-gray-200 shadow-sm">
+        <section className="bg-white  dark:bg-card rounded-xl border border-gray-200 dark:border-border shadow-sm">
             <div className="flex justify-between items-center p-6">
                
-                 <h2 className="text-xl font-semibold text-gray-900">
+                 <h2 className="text-xl font-semibold text-gray-900 dark:text-text-primary">
                     Recent Analyses
                 </h2>
                 {analyses.length != 0 &&(<button
@@ -57,93 +57,105 @@ export default function RecentAnalyses (){
              </div>  
              <div className="overflow-x-auto">
                 <table className="w-full">
-                <thead className="bg-gray-100">
+                <thead className="bg-gray-100 dark:bg-[#202024]">
                     <tr>
-                       <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Resume Name</th> 
-                       <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Match Score</th>
-                       <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Job Role</th>
-                       <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Analyzed on</th>
-                       <th className="text-left px-6 py-3 text-sm font-medium text-gray-500">Action</th>
-                    
+                        <th className="text-left px-6 py-3 text-sm font-medium text-gray-500 dark:text-text-secondary">
+                            Resume Name
+                        </th>
+                        <th className="text-left px-6 py-3 text-sm font-medium text-gray-500 dark:text-text-secondary">
+                            Match Score
+                        </th>
+                        <th className="text-left px-6 py-3 text-sm font-medium text-gray-500 dark:text-text-secondary">
+                            Job Role
+                        </th>
+                        <th className="text-left px-6 py-3 text-sm font-medium text-gray-500 dark:text-text-secondary">
+                            Analyzed on
+                        </th>
+                        <th className="text-left px-6 py-3 text-sm font-medium text-gray-500 dark:text-text-secondary">
+                            Action
+                        </th>
                     </tr>
                 </thead>
 
-                
-            <tbody>
-                {loading && (
-                    <tr>
-                        <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
-                            Loading analyses...
-                        </td>
-                    </tr>
-                )}
-
-                {!loading && error && (
-                    <tr>
-                        <td colSpan="5" className="px-6 py-8 text-center text-red-500">
-                            {error}
-                        </td>
-                    </tr>
-                )}
-
-                {!loading && !error && analyses.length === 0 && (
-                    <tr>
-                        <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
-                    <div>
-                    <div class="null-scene">
-                    <div class="null-word" data-text="NULL">NULL</div>
-                    </div>
-                    </div>
-                            No analyses found. Analyze a resume to get started.
-                        </td>
-                    </tr>
-                )}
-
-                {!loading && !error && analyses.map((analysis) => (
-                    <tr
-                        key={analysis.id}
-                        className="border-t border-gray-200 hover:bg-gray-50 transition"
-                    >
-                        <td className="px-6 py-4 text-sm text-gray-700">
-                            {analysis.resume?.filename || "Unknown resume"}
-                        </td>
-
-                        <td className="px-6 py-4">
-                            <span
-                                className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${getScoreStyle(
-                                    `${analysis.ats_score ?? 0}%`
-                                )}`}
+                <tbody>
+                    {loading && (
+                        <tr>
+                            <td
+                                colSpan="5"
+                                className="px-6 py-8 text-center text-gray-500 dark:text-text-secondary"
                             >
-                                {analysis.ats_score ?? 0}%
-                            </span>
-                        </td>
+                                Loading analyses...
+                            </td>
+                        </tr>
+                    )}
 
-                        <td className="px-6 py-4 text-sm text-gray-700">
-                            {analysis.job_description?.title || "Unknown role"}
-                        </td>
-
-                        <td className="px-6 py-4 text-sm text-gray-700">
-                            {analysis.created_at
-                                ? new Date(analysis.created_at).toLocaleDateString()
-                                : "N/A"}
-                        </td>
-
-                        <td className="px-6 py-4 text-right">
-                            <button
-                                type="button"
-                                title="View analysis"
-                                onClick={() => navigate(`/analysis/${analysis.id}`)}
-                                className="text-gray-500 hover:text-primary transition"
+                    {!loading && error && (
+                        <tr>
+                            <td
+                                colSpan="5"
+                                className="px-6 py-8 text-center text-red-500 dark:text-red-400"
                             >
-                                <Eye size={20} />
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-                </table>
-                </div>  
-           
-        </section>
-    )
+                                {error}
+                            </td>
+                        </tr>
+                    )}
+
+                    {!loading && !error && analyses.length === 0 && (
+                        <tr>
+                            <td
+                                colSpan="5"
+                                className="px-6 py-8 text-center text-gray-500 dark:text-text-secondary"
+                            >
+                                No analyses found. Analyze a resume to get started.
+                            </td>
+                        </tr>
+                    )}
+
+                    {!loading && !error && analyses.map((analysis) => (
+                        <tr
+                            key={analysis.id}
+                            className="border-t border-gray-200 dark:border-border hover:bg-gray-50 dark:hover:bg-[#202024] transition"
+                        >
+                            <td className="px-6 py-4 text-sm text-gray-700 dark:text-text-primary">
+                                {analysis.resume?.filename || "Unknown resume"}
+                            </td>
+
+                            <td className="px-6 py-4">
+                                <span
+                                    className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${getScoreStyle(
+                                        analysis.ats_score ?? 0
+                                    )}`}
+                                >
+                                    {analysis.ats_score ?? 0}%
+                                </span>
+                            </td>
+
+                            <td className="px-6 py-4 text-sm text-gray-700 dark:text-text-primary">
+                                {analysis.job_description?.title || "Unknown role"}
+                            </td>
+
+                            <td className="px-6 py-4 text-sm text-gray-700 dark:text-text-primary">
+                                {analysis.created_at
+                                    ? new Date(analysis.created_at).toLocaleDateString()
+                                    : "N/A"}
+                            </td>
+
+                            <td className="px-6 py-4 text-right">
+                                <button
+                                    type="button"
+                                    title="View analysis"
+                                    aria-label={`View analysis for ${analysis.job_description?.title || "unknown role"}`}
+                                    onClick={() => navigate(`/analysis/${analysis.id}`)}
+                                    className="text-gray-500 dark:text-text-secondary hover:text-primary transition"
+                                >
+                                    <Eye size={20} />
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    </section>
+);
 }

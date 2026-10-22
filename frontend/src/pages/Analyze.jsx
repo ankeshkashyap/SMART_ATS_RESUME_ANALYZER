@@ -216,7 +216,7 @@ const Analyze = () => {
                         <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-sm font-bold text-text-primary">
                         %
                         </div>
-                        <h3 className="mt-3 text-sm font-bold text-text-primaryprimary">
+                        <h3 className="mt-3 text-sm font-bold text-text-primary">
                             ATS Score
                         </h3>
                         <p className="mt-1 text-xs leading-5 text-text-secondary">

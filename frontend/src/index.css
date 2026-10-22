@@ -15,10 +15,30 @@
     --color-success: #22C55E;
     --color-warning: #F59E0B;
     --color-danger: #EF4444;
-    
+
     --radius-card: 18px;
 
-    
+
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+.dark {
+    --color-background: #09090B;
+    --color-card: #18181B;
+    --color-border: #27272A;
+
+    --color-text-primary: #FAFAFA;
+    --color-text-secondary: #A1A1AA;
+
+    --color-navbar: #18181B;
+
+    --color-primary: #FF9900;
+    --color-primary-hover: #FFAD33;
+
+    --color-success: #4ADE80;
+    --color-warning: #FBBF24;
+    --color-danger: #F87171;
 }
 
 .delete-button {
@@ -72,7 +92,7 @@
     line-height: 1;
 
     /* Hide the base text so only the shadows and the top gradient layer show */
-    color: transparent; 
+    color: transparent;
 
     transform: rotateX(12deg) rotateY(-18deg) rotateZ(-8deg);
 
@@ -94,12 +114,12 @@
     position: absolute;
     top: 0;
     left: 0;
-    
+
     background: linear-gradient(
         115deg,
-        #FFD08A 0%,    
-        #FFB347 38%,   
-        #FF9900 65%,   
+        #FFD08A 0%,
+        #FFB347 38%,
+        #FF9900 65%,
         #F08A00 100%
     );
 
@@ -109,6 +129,6 @@
     color: transparent;
 
     /* Ensure no shadows render on this top layer */
-    text-shadow: none; 
+    text-shadow: none;
     z-index: 1;
 }

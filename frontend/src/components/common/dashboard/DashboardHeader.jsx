@@ -9,10 +9,10 @@ const user = useUser()
     return(
         <section className="flex flex-col sm:flex-row  sm:justify-between sm:items-center gap-4">
             <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-text-primary">
                 Dashboard
             </h1>
-            <p className="text-gray-500 mt-2">
+            <p className="text-gray-500 dark:text-text-secondary mt-2">
                 Welcome back, {user?.name}
             </p>
             </div>

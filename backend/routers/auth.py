@@ -1,6 +1,6 @@
 from fastapi import APIRouter,Depends, HTTPException
 from sqlalchemy.orm import Session
-from schemas.user import UserSignup, UserLogin
+from schemas.user import UserSignup, UserLogin, ProfileUpdate
 from models.users import User
 from utils.security import hash_password, verify_password
 from utils.jwt_handler import create_access_token, get_current_user
@@ -87,4 +87,28 @@ def profile (
         "id":current_user.id,
         "name":current_user.name,
         "email": current_user.email
+    }
+
+@router.put("/profile")
+def update_profile(
+    request: ProfileUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    user = (
+        db.query(User)
+        .filter(User.id == current_user.id)
+        .first()
+    )
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    user.name = request.name.strip()
+    db.commit()
+    db.refresh(user)
+
+    return {
+        "id": user.id,
+        "name": user.name,
+        "email": user.email
     }

@@ -16,6 +16,7 @@ function DashboardLayout({ children }) {
         async function fetchProfile() {
             try {
                 const response = await api.get("/auth/profile");
+                console.log("Profile API response:", response.data);
                 setUser(response.data);
             } catch (error) {
                 console.error("Failed to fetch user profile:", error);

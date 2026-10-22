@@ -11,6 +11,9 @@ import JDHistory from "../pages/JDHistory";
 import Resume from "../pages/Resume";
 import ResumeDetails from "../pages/ResumeDetails";
 import AnalysisHistory from "../pages/AnalysisHistory";
+import Analytics from "../pages/Analytics";
+import Profile from "../pages/Profile";
+import Settings from "../pages/Settings";
 function AppRoutes() {
     return (
         <BrowserRouter>
@@ -76,10 +79,37 @@ function AppRoutes() {
                 />
 
                 <Route
-                    path="//analysis-history"
+                    path="/analysis-history"
                     element={
                         <ProtectedRoute>
                             <AnalysisHistory />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/analytics"
+                    element={
+                        <ProtectedRoute>
+                            <Analytics />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <Profile />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/settings"
+                    element={
+                        <ProtectedRoute>
+                            <Settings />
                         </ProtectedRoute>
                     }
                 />

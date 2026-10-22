@@ -93,7 +93,8 @@ function JobDescription() {
     if (description.trim().length < 50) {
       setError("Job description must contain at least 50 characters.");
       return;
-    }
+    }   
+
 
     try {
       setLoading(true);
@@ -120,11 +121,11 @@ function JobDescription() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f8fa] px-7 py-8">
+    <div className="min-h-screen bg-[#f7f8fa] dark:bg-background px-7 py-8">
     <button
         type="button"
         onClick={() => navigate("/dashboard")}
-        className="cursor-pointer mb-6 flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
+        className="cursor-pointer mb-6 flex items-center gap-2 text-sm text-gray-900 hover:text-gray-500 dark:text-text-secondary"
         >
        <ArrowLeft size={16} />
         Back to DashBoard
@@ -133,11 +134,11 @@ function JobDescription() {
     <div className="mb-7 flex items-start justify-between">
 
         <div>
-            <h1 className="text-2xl font-bold tracking-tight text-[#172b4d]">
+            <h1 className="text-2xl font-bold tracking-tight text-[#172b4d] dark:text-text-primary">
                 Job Description
             </h1>
 
-            <p className="mt-1 text-sm text-[#66758a]">
+            <p className="mt-1 text-sm text-[#66758a] dark:text-text-secondary">
                 Paste the job description you want to analyze.
             </p>
         </div>
@@ -146,7 +147,7 @@ function JobDescription() {
 
 
     
-    <div className="rounded-lg border border-[#dfe3e8] bg-white shadow-sm">
+    <div className="rounded-lg border border-[#dfe3e8] dark:border-border bg-white dark:bg-card shadow-sm">
 
         <form
             onSubmit={handleSubmit}
@@ -158,7 +159,7 @@ function JobDescription() {
 
                 <label
                     htmlFor="job-title"
-                    className="mb-2 block text-sm font-semibold text-[#172b4d]"
+                    className="mb-2 block text-sm font-semibold text-[#172b4d] dark:text-text-primary"
                 >
                     Job Title
                 </label>
@@ -169,7 +170,7 @@ function JobDescription() {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g. Python Backend Developer"
-                    className="h-11 w-full rounded-md border border-[#cfd5dd] bg-white px-3 text-sm text-[#172b4d] outline-none transition placeholder:text-[#98a2b3] focus:border-primary focus:ring-2 focus:ring-primary/15"
+                    className="h-11 w-full rounded-md border border-[#cfd5dd] dark:border-border bg-white dark:bg-[#202024] px-3 text-sm text-[#172b4d] dark:text-text-primary outline-none transition placeholder:text-[#98a2b3] focus:border-primary focus:ring-2 focus:ring-primary/15"
                 />
 
             </div>
@@ -180,13 +181,13 @@ function JobDescription() {
 
                     <label
                         htmlFor="job-description"
-                        className="text-sm font-semibold text-[#172b4d]"
+                        className="text-sm font-semibold text-[#172b4d] dark:text-text-primary"
                     >
                         Job Description
                     </label>
 
                     <span
-                        className="rounded-md border border-[#ffe0b2] bg-[#fff7e8] px-2.5 py-1 text-xs font-medium text-[#b96800]"
+                        className="rounded-md border border-[#ffe0b2] dark:border-border bg-[#fff7e8] dark:bg-[#202024] px-2.5 py-1 text-xs font-medium text-[#b96800]"
                     >
                         {description.length} / {MAX_LENGTH}
                     </span>
@@ -199,13 +200,13 @@ function JobDescription() {
                     onChange={handleDescriptionChange}
                     placeholder="Paste the job description here..."
                     rows={15}
-                    className="w-full resize-y rounded-md border border-[#cfd5dd] bg-white px-3 py-3 text-sm leading-6 text-[#172b4d] outline-none transition placeholder:text-[#98a2b3] focus:border-primary focus:ring-2 focus:ring-primary/15"
+                    className="w-full resize-y rounded-md border border-[#cfd5dd] dark:border-border bg-white dark:bg-[#202024] px-3 py-3 text-sm leading-6 text-[#172b4d] dark:text-text-primary outline-none transition placeholder:text-[#98a2b3] focus:border-primary focus:ring-2 focus:ring-primary/15"
                 />
 
             </div>
 
             {error && (
-                <p className="mb-5 rounded-md border border-[#f1c4c4] bg-[#fff7f7] px-3 py-2.5 text-sm text-[#b42318]">
+                <p className="mb-5 rounded-md border border-[#f1c4c4] dark:border-border bg-[#fff7f7] dark:bg-[#202024] px-3 py-2.5 text-sm text-[#b42318] dark:text-danger">
                     {error}
                 </p>
             )}
@@ -217,13 +218,12 @@ function JobDescription() {
                     type="button"
                     onClick={handleExample}
                     disabled={loading}
-                    className="rounded-md border border-[#cfd5dd] bg-white px-5 py-2.5 text-sm font-semibold text-[#344054] transition hover:bg-[#f7f8fa] hover:border-[#b8c0ca] disabled:cursor-not-allowed disabled:opacity-50"
-                >
+                    className="rounded-md border border-[#cfd5dd] dark:border-border bg-white dark:bg-[#202024] px-5 py-2.5 text-sm font-semibold text-[#344054] dark:text-text-primary transition hover:bg-[#f7f8fa] hover:border-[#b8c0ca] dark:hover:bg-[#2a2a30] dark:hover:border-[#41414a] disabled:cursor-not-allowed disabled:opacity-50"                >
                     Use Example
                 </button>
 
-                <button
-                    type="submit"
+                <button    
+                        type="submit"
                     disabled={loading}
                     className="rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
                 >
@@ -238,21 +238,21 @@ function JobDescription() {
 
 
     {result && (
-        <div className="mt-7 rounded-lg border border-[#dfe3e8] bg-white p-6 shadow-sm">
+        <div className="mt-7 rounded-lg border border-[#dfe3e8] dark:border-border bg-white dark:bg-card p-6 shadow-sm">
 
             <div className="mb-4 flex items-center justify-between">
 
                 <div>
-                    <h2 className="text-lg font-bold text-[#172b4d]">
+                    <h2 className="text-lg font-bold text-[#172b4d] dark:text-text-primary">
                         Extracted Keywords
                     </h2>
 
-                    <p className="mt-1 text-xs text-[#66758a]">
+                    <p className="mt-1 text-xs text-[#66758a] dark:text-text-secondary">
                         Skills and technologies detected from the job description.
                     </p>
                 </div>
 
-                <span className="rounded-md bg-[#fff7e8] px-2.5 py-1 text-xs font-semibold text-[#b96800]">
+                <span className="rounded-md bg-[#fff7e8] dark:bg-border px-2.5 py-1 text-xs font-semibold text-[#b96800]">
                     {result.keywords?.length || 0} found
                 </span>
 
@@ -265,7 +265,7 @@ function JobDescription() {
 
                     <span
                         key={keyword}
-                        className="rounded-md border border-[#ffe0b2] bg-[#fff7e8] px-2.5 py-1.5 text-xs font-semibold text-[#9a5b00]"
+                        className="rounded-md border border-[#ffe0b24e] bg-[#fff7e8] dark:bg-border px-2.5 py-1.5 text-xs font-semibold text-[#9a5b00]"
                     >
                         {keyword}
                     </span>
@@ -283,16 +283,16 @@ function JobDescription() {
         <div className="mb-4 flex items-center justify-between">
 
             <div>
-                <h2 className="text-lg font-bold text-[#172b4d]">
+                <h2 className="text-lg font-bold text-[#172b4d] dark:text-text-primary">
                     Previous Job Descriptions
                 </h2>
-
-                <p className="mt-1 text-xs text-[#66758a]">
+                
+                <p className="mt-1 text-xs text-[#66758a] dark:text-text-secondary">
                     Your recently analyzed job descriptions.
                 </p>
             </div>
 
-            <span className="flex h-7 min-w-7 items-center justify-center rounded-md bg-[#eef1f4] px-2 text-xs font-semibold text-[#596579]">
+            <span className="flex h-7 min-w-7 items-center justify-center rounded-md bg-[#eef1f4] dark:bg-[#202024] px-2 text-xs font-semibold text-[#596579] dark:text-text-secondary">
                 {jobDescriptions.length}
             </span>
 
@@ -301,13 +301,13 @@ function JobDescription() {
 
         {jobDescriptions.length === 0 ? (
 
-            <div className="rounded-lg border border-dashed border-[#cfd5dd] bg-white px-5 py-10 text-center">
+            <div className="rounded-lg border border-dashed border-[#cfd5dd] dark:border-border bg-white dark:bg-card px-5 py-10 text-center">
 
-                <p className="text-sm font-semibold text-[#344054]">
+                <p className="text-sm font-semibold text-[#344054] dark:text-text-primary">
                     No job descriptions yet.
                 </p>
 
-                <p className="mt-1 text-xs text-[#7a8799]">
+                <p className="mt-1 text-xs text-[#7a8799] dark:text-text-secondary">
                     Analyze a job description to start building your history.
                 </p>
 
@@ -315,27 +315,27 @@ function JobDescription() {
 
         ) : (
 
-            <div className="divide-y divide-border rounded-lg border border-[#dfe3e8] bg-white">
+            <div className="divide-y divide-border rounded-lg border border-[#dfe3e8] dark:border-border bg-white dark:bg-card">
 
                 {jobDescriptions.map((jd) => (
 
                     <div
                         key={jd.id}
-                        className="flex items-start justify-between gap-6 px-5 py-5 transition hover:bg-[#fafbfc]"
+                        className="flex items-start justify-between gap-6 px-5 py-5 transition hover:bg-[#fafbfc] dark:hover:bg-[#202024]"
                     >
 
                         <div className="min-w-0 flex-1">
 
-                            <h3 className="text-sm font-semibold text-[#172b4d]">
+                            <h3 className="text-sm font-semibold text-[#172b4d] dark:text-text-primary">
                                 {jd.title}
                             </h3>
 
-                            <p className="mt-1.5 max-w-3xl text-sm leading-5 text-[#66758a]">
+                            <p className="mt-1.5 max-w-3xl text-sm leading-5 text-[#66758a] dark:text-text-secondary">
                                 {jd.description.slice(0, 150)}
                                 {jd.description.length > 150 ? "..." : ""}
                             </p>
 
-                            <p className="mt-2 text-[11px] text-[#98a2b3]">
+                            <p className="mt-2 text-[11px] text-[#98a2b3] dark:text-text-secondary">
                                 {new Date(jd.created_at).toLocaleString()}
                             </p>
 
@@ -348,7 +348,7 @@ function JobDescription() {
 
                                 <span
                                     key={keyword}
-                                    className="rounded-md border border-[#e1e5eb] bg-[#f7f8fa] px-2 py-1 text-[11px] font-medium text-[#596579]"
+                                    className="rounded-md border border-[#e1e5eb] dark:border-border bg-[#f7f8fa] dark:bg-[#202024] px-2 py-1 text-[11px] font-medium text-[#596579] dark:text-text-secondary"
                                 >
                                     {keyword}
                                 </span>
@@ -374,7 +374,7 @@ function JobDescription() {
 
     {deleteID&& (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-            <div className="w-full max-w-md rounded-lg border border-border bg-white p-6 shadow-lg">
+            <div className="w-full max-w-md rounded-lg border border-border bg-white dark:bg-card p-6 shadow-lg">
 
                 <h2 className="text-lg font-bold text-text-h">
                     Delete Job Description?    
@@ -387,7 +387,7 @@ function JobDescription() {
                 <div className="mt-6 flex justify-end gap-3">
                     <button type="button"
                     onClick={()=>setDeleteID(null)}
-                    className="rounded-md border border-border bg-white px-5 py-2.5 text-sm font-semibold text-text-h transition hover:bg-social-bg">
+                    className="rounded-md border border-border bg-white dark:bg-[#202024] px-5 py-2.5 text-sm font-semibold text-text-h dark:text-text-primary transition hover:bg-social-bg dark:hover:bg-[#2a2a30]">
                         Cancel
                     </button>
                     <button 
@@ -410,4 +410,5 @@ function JobDescription() {
 }
 
 export default JobDescription;
+
 
