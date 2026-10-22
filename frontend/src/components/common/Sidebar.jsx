@@ -64,7 +64,9 @@ export default function Sidebar({ collapsed = false, mobileOpen = false, onClose
                             const Icon = item.icon;
                             const isActive = location.pathname === item.path;
                             return (
-                            <li key={item.name} onClick= {() => handleNavigate(item.path)} className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-200 ${
+                            <li key={item.name} onClick= {() => handleNavigate(item.path)} className={`flex items-center ${
+                                                                                                                collapsed ? "justify-center px-0" : "gap-3 px-4"
+                                                                                                            } py-3 rounded-lg cursor-pointer transition-all duration-200 ${
                                 isActive
                                     ? "bg-orange-50 border-l-4 border-primary text-gray-900 font-semibold dark:bg-orange-900/20 dark:text-primary"
                                     : "text-text-secondary hover:bg-gray-100 hover:text-text-primary dark:hover:bg-slate-700 dark:hover:text-gray-100"
