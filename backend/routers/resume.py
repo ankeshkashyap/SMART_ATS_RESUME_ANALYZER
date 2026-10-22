@@ -1,3 +1,5 @@
+from services.storage_service import upload_file , delete_resume as delete_stored_resume            
+import tempfile
 import uuid
 from pathlib import Path
 
@@ -79,18 +81,44 @@ async def upload_resume(file: UploadFile= File(...),
 
          
 
-    unique_filename = f"{uuid.uuid4()}_{file.filename}"
-    file_path= UPLOAD_DIR / unique_filename
-    with open(file_path,"wb") as buffer :
-        buffer.write(contents)
+    
+    unique_filename = f"{uuid.uuid4()}_{Path(file.filename).name}"
 
-    file_type = extension.replace(".","")
-    parsed_resume = parse_resume(str(file_path),file_type)
+    content_type = (
+        file.content_type
+        or (
+            "application/pdf"
+            if extension == ".pdf"
+            else "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
+    )
+
+    stored_filename = upload_file(
+        unique_filename,
+        contents,
+        content_type,
+    )
+
+    file_type = extension.replace(".", "")
+
+    try:
+        with tempfile.NamedTemporaryFile(
+            suffix=extension,
+            delete=False,
+        ) as temp_file:
+            temp_file.write(contents)
+            temp_path = temp_file.name
+
+        parsed_resume = parse_resume(temp_path, file_type)
+    finally:
+        if "temp_path" in locals() and Path(temp_path).exists():
+            Path(temp_path).unlink()
+
 
     resume = Resume (
         user_id = current_user.id,
         original_filename=file.filename,
-        stored_filename=unique_filename,
+        stored_filename=stored_filename,
         file_hash=file_hash,
         file_type=extension,
         file_size=len(contents),
@@ -192,48 +220,41 @@ def get_resume (
         }
     }
 
+
 @router.delete("/{resume_id}")
 def delete_resume(
-          resume_id:int ,
-          db : Session = Depends(get_db),
-          user : User = Depends(get_current_user)
-) :
-     resume = (
-          db.query(Resume)
-          .filter(
-               Resume.id == resume_id,
-               Resume.user_id == user.id
-          ).first()
-     )
+    resume_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    resume = (
+        db.query(Resume)
+        .filter(
+            Resume.id == resume_id,
+            Resume.user_id == user.id,
+        )
+        .first()
+    )
 
-     if not resume :
-               raise HTTPException(
-                    status_code = 404,
-                    detail="Resume not Found"
-               )
-
-     file_path = (UPLOAD_DIR / resume.stored_filename).resolve()
-
-     if file_path.parent != UPLOAD_DIR.resolve():
+    if not resume:
         raise HTTPException(
-            status_code=400,
-            detail="Invalid resume file path"
+            status_code=404,
+            detail="Resume not Found",
         )
 
-     try:
-        if file_path.exists():
-            file_path.unlink()
+    try:
+        delete_stored_resume(resume.stored_filename) # type: ignore
 
         db.delete(resume)
         db.commit()
 
-     except Exception:
+    except Exception:
         db.rollback()
         raise HTTPException(
             status_code=500,
-            detail="Failed to delete resume"
+            detail="Failed to delete resume",
         )
 
-     return {
+    return {
         "message": "Resume deleted successfully"
     }
