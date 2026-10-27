@@ -1,16 +1,10 @@
-from sentence_transformers import SentenceTransformer, util
+from sentence_transformers import util
+from services.embedding_model import get_embedding_model
 
 class RequirementMatcher:
-
-    def __init__(self):
-        # Lazy-load: model is ~200MB RAM, defer until first use
-        self._model = None
-
     @property
     def model(self):
-        if self._model is None:
-            self._model = SentenceTransformer("all-MiniLM-L6-v2")
-        return self._model
+        return get_embedding_model()
 
     def split_into_sentences (self,text):
 
